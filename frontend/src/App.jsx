@@ -5,6 +5,10 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import EditGame from "./pages/EditGame";
 import NavBar from "./components/NavBar";
+import EditQuestion from "./pages/EditQuestion";
+import JoinGameScreen from "./pages/JoinGameScreen";
+import Results from "./pages/Results";
+import ActiveGamePlay from "./pages/ActiveGamePlay";
 import {
   useHistory,
   BrowserRouter as Switch,
@@ -34,13 +38,28 @@ function App() {
           <Register setToken={setToken}></Register>
         </Route>
         <Route path="/dashboard">
-          {/* {checkLoggedIn()} */}
-          <NavBar></NavBar>
+          <NavBar token={token}></NavBar>
           <Dashboard token={token}></Dashboard>
         </Route>
-        <Route path="/edit/:gameid">
-          <NavBar></NavBar>
+        <Route exact path="/edit/:gameid">
+          <NavBar token={token}></NavBar>
           <EditGame token={token}></EditGame>
+        </Route>
+        <Route exact path="/edit/:gameid/:questionid">
+          <NavBar token={token}></NavBar>
+          <EditQuestion token={token}></EditQuestion>
+        </Route>
+        <Route exact path="/results/:sessionid">
+          <NavBar token={token}></NavBar>
+          <Results token={token}></Results>
+        </Route>
+        <Route exact path="/play/:sessionid">
+          <NavBar token={token}></NavBar>
+          <JoinGameScreen token={token}></JoinGameScreen>
+        </Route>
+        <Route exact path="/play/:sessionid/:playerid">
+          <NavBar token={token}></NavBar>
+          <ActiveGamePlay token={token}></ActiveGamePlay>
         </Route>
 
         <Route exact path="/">

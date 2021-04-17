@@ -6,7 +6,6 @@ function InputField(props) {
     <div>
       <TextField
         onChange={(e) => props.setState(e.target.value)}
-        id="standard-basic"
         label={props.field}
         value={props.state}
       />

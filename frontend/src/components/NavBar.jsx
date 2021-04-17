@@ -9,7 +9,7 @@ function NavBar(props) {
   const history = useHistory();
 
   const logOut = async (token) => {
-    const request = await fetch("http://localhost:5111/admin/auth/logout", {
+    const request = await fetch("http://localhost:5736/admin/auth/logout", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -21,10 +21,16 @@ function NavBar(props) {
     if (request.status == "200") history.push("/login");
   };
 
+  const homeLink = (e) => {
+    history.push("/dashboard");
+  };
+
   return (
     <AppBar position="static">
       <Toolbar variant="dense">
-        <Button color="inherit">Link somewhere</Button>
+        <Button color="inherit" onClick={homeLink}>
+          Home
+        </Button>
         <Button color="inherit" edge="end" onClick={() => logOut(props.token)}>
           Log Out
         </Button>

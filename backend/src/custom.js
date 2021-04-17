@@ -11,12 +11,25 @@
 //   image: "asdfasdf",
 //   url: "www.asdfasdf",
 //   answers: [{ id: "asdfasdf", answer: "doge" }],
-//   correctAnswers: [123, 43, 122],
+//   correctAnswer: [123, 43, 122],
 // };
+
+//https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
 
 export const quizQuestionPublicReturn = (question) => {
   console.log("See question: ", question);
-  return question.correctAnswer;
+
+  const question_clone = { ...question };
+  delete question_clone.correctAnswer;
+
+  shuffleArray(question_clone.answers);
+  return question_clone;
 };
 
 /*

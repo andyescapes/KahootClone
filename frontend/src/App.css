@@ -28,6 +28,21 @@
   color: #61dafb;
 }
 
+.exit {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  float: right;
+  margin-top: 5px;
+}
+.exit:hover,
+.exit:focus {
+  color: rgb(150, 150, 150);
+  text-decoration: none;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
