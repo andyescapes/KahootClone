@@ -16,7 +16,6 @@ import GameCard from "../components/GameCard";
 
 function EditGame(props) {
   const [question, setQuestion] = React.useState("");
-  const [questionType, setQuestionType] = React.useState("");
   const [timeLimit, setTimeLimit] = React.useState("");
   const [points, setPoints] = React.useState("");
   const [answers, setAnswers] = React.useState([0, 0, 0, 0, 0, 0]);
@@ -35,7 +34,7 @@ function EditGame(props) {
 
   const getQuizDetails = async (token, id) => {
     console.log(id);
-    const request = await fetch(`http://localhost:5736/admin/quiz/${id}`, {
+    const request = await fetch(`http://localhost:5543/admin/quiz/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -53,7 +52,7 @@ function EditGame(props) {
     // });
     const body = { questions: questionObject };
     console.log(body);
-    if (!question || !questionType || !timeLimit || !points) {
+    if (!question || !timeLimit || !points) {
       setError("All fields must be full");
       return;
     }
@@ -62,7 +61,7 @@ function EditGame(props) {
       return;
     }
     setError("");
-    const request = await fetch(`http://localhost:5736/admin/quiz/${id}`, {
+    const request = await fetch(`http://localhost:5543/admin/quiz/${id}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -86,7 +85,7 @@ function EditGame(props) {
     const body = { questions: questionDeleted };
 
     console.log(questionDeleted);
-    const request = await fetch(`http://localhost:5736/admin/quiz/${gameId}`, {
+    const request = await fetch(`http://localhost:5543/admin/quiz/${gameId}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -120,7 +119,6 @@ function EditGame(props) {
           <GameCard
             thumbnail={false}
             title={question.question}
-            details={question.questionType}
             delete={deleteQuizQuestion}
             id={gameid}
             key={question.id}
@@ -136,18 +134,11 @@ function EditGame(props) {
         </Typography>
 
         <Grid container spacing={2}>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <InputField
               field="Question"
               setState={setQuestion}
               state={question}
-            ></InputField>
-          </Grid>
-          <Grid item xs={6}>
-            <InputField
-              field="Question Type"
-              setState={setQuestionType}
-              state={questionType}
             ></InputField>
           </Grid>
           <Grid item xs={6}>
@@ -225,20 +216,17 @@ function EditGame(props) {
           color="primary"
           variant="contained"
           onClick={() => {
-            const answerCopy = [...answers];
-            answerCopy[0].correct = true;
-
             addQuizQuestion(props.token, gameid, [
               ...questions,
               {
                 id: newId(),
                 question: question,
-                questionType: questionType,
+                questionType: "single",
                 timeLimit: timeLimit,
                 points: points,
                 image: "",
                 url: "",
-                answers: answerCopy,
+                answers: answers,
               },
             ]);
           }}

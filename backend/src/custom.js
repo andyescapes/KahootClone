@@ -15,12 +15,12 @@
 // };
 
 //https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
+// function shuffleArray(array) {
+//   for (let i = array.length - 1; i > 0; i--) {
+//     const j = Math.floor(Math.random() * (i + 1));
+//     [array[i], array[j]] = [array[j], array[i]];
+//   }
+// }
 
 export const quizQuestionPublicReturn = (question) => {
   console.log("See question: ", question);
@@ -28,7 +28,6 @@ export const quizQuestionPublicReturn = (question) => {
   const question_clone = { ...question };
   delete question_clone.correctAnswer;
 
-  shuffleArray(question_clone.answers);
   return question_clone;
 };
 
@@ -37,7 +36,9 @@ export const quizQuestionPublicReturn = (question) => {
  the correct answers (minimum 1).
 */
 export const quizQuestionGetCorrectAnswers = (question) => {
-  return question.correctAnswers; // For a single answer
+  return question.answers.filter((answer) => {
+    return answer.correct === true;
+  }); // For a single answer
 };
 
 /*

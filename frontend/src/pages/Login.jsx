@@ -17,7 +17,7 @@ function Login(props) {
     };
 
     async function logInRequest(body) {
-      const result = await fetch("http://localhost:5736/admin/auth/login", {
+      const result = await fetch("http://localhost:5543/admin/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

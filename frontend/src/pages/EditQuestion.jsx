@@ -17,7 +17,6 @@ import GameCard from "../components/GameCard";
 
 function EditGame(props) {
   const [question, setQuestion] = React.useState("");
-  const [questionType, setQuestionType] = React.useState("");
   const [timeLimit, setTimeLimit] = React.useState("");
   const [points, setPoints] = React.useState("");
   const [answers, setAnswers] = React.useState([0, 0, 0, 0, 0, 0]);
@@ -38,7 +37,7 @@ function EditGame(props) {
   console.log(answers, "lol");
   const getQuizDetails = async (token, id) => {
     console.log(id);
-    const request = await fetch(`http://localhost:5736/admin/quiz/${id}`, {
+    const request = await fetch(`http://localhost:5543/admin/quiz/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -53,7 +52,6 @@ function EditGame(props) {
     const question = selectedQuestion[0];
     setQuestions(result.questions);
     setQuestion(question.question);
-    setQuestionType(question.questionType);
     setTimeLimit(question.timeLimit);
     setPoints(question.points);
     setAnswers(question.answers);
@@ -77,7 +75,7 @@ function EditGame(props) {
 
     const body = { questions: editedQuestionsArray };
     console.log(body, "this is the body");
-    if (!question || !questionType || !timeLimit || !points) {
+    if (!question || !timeLimit || !points) {
       setError("All fields must be full");
       return;
     }
@@ -96,7 +94,7 @@ function EditGame(props) {
     //   return;
     // }
     setError("");
-    const request = await fetch(`http://localhost:5736/admin/quiz/${id}`, {
+    const request = await fetch(`http://localhost:5543/admin/quiz/${id}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -150,10 +148,10 @@ function EditGame(props) {
   const updateImageState = (event) => {
     try {
       fileToDataUrl(event.target.files[0]).then((res) => {
-        console.log(res);
-        const split_64_encoded = res.split(",");
-        console.log(split_64_encoded[1]);
-        setImage(split_64_encoded[1]);
+        // console.log(res);
+        // const split_64_encoded = res.split(",");
+        // console.log(split_64_encoded[1]);
+        setImage(res);
       });
       setError("");
     } catch (e) {
@@ -187,20 +185,14 @@ function EditGame(props) {
         </Typography>
 
         <Grid container spacing={2}>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <InputField
               field="Question"
               setState={setQuestion}
               state={question}
             ></InputField>
           </Grid>
-          <Grid item xs={6}>
-            <InputField
-              field="Question Type"
-              setState={setQuestionType}
-              state={questionType}
-            ></InputField>
-          </Grid>
+
           <Grid item xs={6}>
             <InputField
               field="Time Limit"
@@ -338,6 +330,12 @@ function EditGame(props) {
           onClick={() => {
             const splitLink = url.split("watch?v=");
             const embedLink = splitLink.join("embed/");
+            const questionType =
+              answers.filter((answer) => {
+                return answer.correct == true;
+              }).length > 1
+                ? "multiple"
+                : "single";
             saveQuizQuestion(props.token, gameid, questionid, questions, {
               id: questionid,
               question: question,

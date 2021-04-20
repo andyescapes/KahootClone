@@ -14,7 +14,7 @@ function App(props) {
       name: inputName,
     };
     async function logInRequest(body) {
-      const result = await fetch("http://localhost:5736/admin/auth/register", {
+      const result = await fetch("http://localhost:5543/admin/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

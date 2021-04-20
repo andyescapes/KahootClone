@@ -20,7 +20,7 @@ function Dashboard(props) {
   };
 
   const deleteQuiz = async (token, id, setQuizzes, quizzes) => {
-    const request = await fetch(`http://localhost:5736/admin/quiz/${id}`, {
+    const request = await fetch(`http://localhost:5543/admin/quiz/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,

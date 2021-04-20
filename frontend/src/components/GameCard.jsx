@@ -21,7 +21,7 @@ function GameCard(props) {
   const [gameStopped, setGameStopped] = React.useState(false);
 
   const getQuizDetails = async (token, id) => {
-    const request = await fetch(`http://localhost:5736/admin/quiz/${id}`, {
+    const request = await fetch(`http://localhost:5543/admin/quiz/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -35,7 +35,7 @@ function GameCard(props) {
 
   const gameApiCall = async (token, id, command) => {
     const request = await fetch(
-      `http://localhost:5736/admin/quiz/${id}/${command}`,
+      `http://localhost:5543/admin/quiz/${id}/${command}`,
       {
         method: "POST",
         headers: {
