@@ -1,24 +1,25 @@
-import React from "react";
-import "../App.css";
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import ErrorPopUp from "../components/ErrorPopUp";
-import SessionModal from "../components/SessionModal";
-import { useHistory } from "react-router-dom";
-import { makeStyles } from "@material-ui/core";
+import React from 'react';
+import '../App.css';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import ErrorPopUp from '../components/ErrorPopUp';
+import SessionModal from '../components/SessionModal';
+import { useHistory } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core';
+import PropTypes from 'prop-types';
 
-function GameCard(props) {
+function GameCard (props) {
   const history = useHistory();
 
   const [error, setError] = React.useState(false);
-  const [sessionId, setSessionId] = React.useState("");
-  const [activeSession, setActiveSession] = React.useState("");
+  const [sessionId, setSessionId] = React.useState('');
+  const [activeSession, setActiveSession] = React.useState('');
   const [gameStopped, setGameStopped] = React.useState(false);
   const [message, setMessage] = React.useState(false);
 
@@ -26,7 +27,7 @@ function GameCard(props) {
     const request = await fetch(`http://localhost:5544/admin/quiz/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
     const result = await request.json();
@@ -39,9 +40,9 @@ function GameCard(props) {
     const request = await fetch(
       `http://localhost:5544/admin/quiz/${id}/${command}`,
       {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
       }
@@ -51,13 +52,13 @@ function GameCard(props) {
     if (result.error) setError(result.error);
 
     if (request.status === 200) {
-      console.log("gey");
+      console.log('gey');
 
-      if (command === "start") {
+      if (command === 'start') {
         // setActiveSessionPopUp(true);
         getQuizDetails(token, id);
-      } else if (command === "advance") {
-        setMessage("The Quiz moved on to the next Question");
+      } else if (command === 'advance') {
+        setMessage('The Quiz moved on to the next Question');
       } else {
         setGameStopped(true);
       }
@@ -68,7 +69,7 @@ function GameCard(props) {
     if (sessionId) {
       history.push(`/results/${props.id}/${sessionId}`);
     } else {
-      setMessage("You have not finished a game since you signed in");
+      setMessage('You have not finished a game since you signed in');
     }
   };
 
@@ -78,7 +79,7 @@ function GameCard(props) {
 
   const useStyles = makeStyles((theme) => ({
     root: {
-      fontSize: "0.7em",
+      fontSize: '0.7em',
     },
   }));
   const classes = useStyles();
@@ -95,7 +96,7 @@ function GameCard(props) {
         >
           {props.thumbnail ?? (
             <CardMedia
-            
+
               component="img"
               height="140"
               image={props.thumbnail}
@@ -137,7 +138,7 @@ function GameCard(props) {
               </Typography>
             )}
           </CardContent>
-        </CardActionArea>{" "}
+        </CardActionArea>{' '}
         {props.dashboard && (
           <>
             <CardActions>
@@ -148,7 +149,7 @@ function GameCard(props) {
                 variant="contained"
                 onClick={(event) => {
                   event.stopPropagation();
-                  gameApiCall(props.token, props.id, "start");
+                  gameApiCall(props.token, props.id, 'start');
                 }}
               >
                 Start Game
@@ -160,11 +161,11 @@ function GameCard(props) {
                 variant="contained"
                 onClick={(event) => {
                   event.stopPropagation();
-                  gameApiCall(props.token, props.id, "end");
+                  gameApiCall(props.token, props.id, 'end');
                 }}
               >
                 Stop Game
-              </Button>{" "}
+              </Button>{' '}
               <Button
                 className={classes.root}
                 size="small"
@@ -172,7 +173,7 @@ function GameCard(props) {
                 variant="contained"
                 onClick={(event) => {
                   event.stopPropagation();
-                  gameApiCall(props.token, props.id, "advance");
+                  gameApiCall(props.token, props.id, 'advance');
                 }}
               >
                 Advance Question
@@ -188,7 +189,7 @@ function GameCard(props) {
                     history.push(`/results/${props.id}/${sessionId}`);
                   } else {
                     setMessage(
-                      "You have not finished a game since you signed in"
+                      'You have not finished a game since you signed in'
                     );
                   }
                 }}
@@ -204,16 +205,16 @@ function GameCard(props) {
         <SessionModal
           setter={setActiveSession}
           data={sessionId}
-          message={"New Session Started"}
-          buttonMessage={"Copy Link"}
+          message={'New Session Started'}
+          buttonMessage={'Copy Link'}
           onClickFn={startGameOnClick}
         ></SessionModal>
       )}
       {gameStopped && (
         <SessionModal
           setter={setGameStopped}
-          message={"Would you like to view the results?"}
-          buttonMessage={"View Results"}
+          message={'Would you like to view the results?'}
+          buttonMessage={'View Results'}
           onClickFn={endGameOnClick}
         ></SessionModal>
       )}
@@ -223,6 +224,19 @@ function GameCard(props) {
       </Box>
     </div>
   );
+}
+
+GameCard.propTypes = {
+  id: PropTypes.string,
+  dashboard: PropTypes.bool,
+  questionId: PropTypes.string,
+  thumbnail: PropTypes.string,
+  token: PropTypes.string,
+  setQuizzes: PropTypes.func,
+  details: PropTypes.string,
+  title: PropTypes.string,
+  delete: PropTypes.func,
+  quizzes: PropTypes.array
 }
 
 export default GameCard;

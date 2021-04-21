@@ -1,24 +1,25 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
+    border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
 }));
 
-export default function ErrorPopUp(props) {
+export default function ErrorPopUp (props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
 
@@ -51,7 +52,7 @@ export default function ErrorPopUp(props) {
           >
             <Fade in={open}>
               <div className={classes.paper}>
-                <h2 id="transition-modal-title">{props.title ?? "Error"}</h2>
+                <h2 id="transition-modal-title">{props.title ?? 'Error'}</h2>
                 <p id="transition-modal-description">{props.error}</p>
               </div>
             </Fade>
@@ -60,4 +61,10 @@ export default function ErrorPopUp(props) {
       )}
     </div>
   );
+}
+
+ErrorPopUp.propTypes = {
+  setError: PropTypes.func,
+  title: PropTypes.string,
+  error: PropTypes.string
 }

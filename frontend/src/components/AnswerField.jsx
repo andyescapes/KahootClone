@@ -1,11 +1,12 @@
-import React from "react";
-import TextField from "@material-ui/core/TextField";
+import React from 'react';
+import TextField from '@material-ui/core/TextField';
+import PropTypes from 'prop-types';
 
-function AnswerField(props) {
-  const { randomBytes } = require("crypto");
+function AnswerField (props) {
+  const { randomBytes } = require('crypto');
 
   const newId = () => {
-    return randomBytes(16).toString("hex");
+    return randomBytes(16).toString('hex');
   };
 
   const setAnswersState = (answers, setAnswers, newAnswer, num) => {
@@ -27,7 +28,7 @@ function AnswerField(props) {
         }
         label={props.field}
       />
-      {/* <input 
+      {/* <input
         type = {props.type ?? "text"}
         onChange = {e=> props.setState(e.target.value)
         }>
@@ -36,4 +37,11 @@ function AnswerField(props) {
   );
 }
 
+AnswerField.propTypes = {
+  answers: PropTypes.array,
+  setAnswers: PropTypes.func,
+  num: PropTypes.number,
+  field: PropTypes.string
+
+}
 export default AnswerField;
