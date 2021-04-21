@@ -217,7 +217,16 @@ function JoinGameScreen(props) {
   //supposedly this polling works at the start and afte the timer is up, we need to get the answers though
   return (
     <>
-      <Container maxWidth="sm">
+        <Grid
+        container
+        spacing={3}
+        justify="center"
+        alignItems="center"
+        direction="column"
+      >
+        <Grid item xs={2}></Grid>
+        <Grid item xs={10}>
+            <Container maxWidth="sm">
         {url && (
           <iframe
             src={url}
@@ -295,6 +304,11 @@ function JoinGameScreen(props) {
           }
         ></SessionModal>
       )}
+        </Grid>
+        <Grid item xs={2}></Grid>
+      </Grid>
+
+    
     </>
   );
 }

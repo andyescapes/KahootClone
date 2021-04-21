@@ -11,6 +11,7 @@ import {
   Table,
   TableBody,
   Container,
+  Grid,
 } from "@material-ui/core";
 import { getQuizzes } from "../helper/api.js";
 import GameCard from "../components/GameCard";
@@ -93,31 +94,43 @@ function Results(props) {
 
   return (
     <>
-      <Container>
-        <h1>Final Results!</h1>
+      <Grid
+        container
+        spacing={3}
+        justify="center"
+        alignItems="center"
+        direction="column"
+      >
+        <Grid item xs={2}></Grid>
+        <Grid item xs={10}>
+          <Container>
+            <h1>Final Results!</h1>
 
-        <TableContainer>
-          <Table aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Player</TableCell>
-                <TableCell align="right">Scores</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {scores.map((scoreObject, index) => (
-                <TableRow key={result.name}>
-                  <TableCell component="th" scope="row">
-                    {scoreObject.name}
-                  </TableCell>
-                  <TableCell align="right">{scoreObject.score}</TableCell>
-                </TableRow>
-              ))}
-              <TableRow></TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Container>
+            <TableContainer>
+              <Table aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Player</TableCell>
+                    <TableCell align="right">Scores</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {scores.map((scoreObject, index) => (
+                    <TableRow key={scoreObject.name}>
+                      <TableCell component="th" scope="row">
+                        {scoreObject.name}
+                      </TableCell>
+                      <TableCell align="right">{scoreObject.score}</TableCell>
+                    </TableRow>
+                  ))}
+                  <TableRow></TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Container>
+        </Grid>
+        <Grid item xs={2}></Grid>
+      </Grid>
     </>
   );
 }

@@ -51,27 +51,45 @@ function JoinGameScreen(props) {
 
   return (
     <>
-      <Container maxWidth="sm">
-        <Typography variant="h4" gutterBottom gutterTop>
-          Join the Session!
-        </Typography>
-        <InputField
-          field="Session ID"
-          state={sessionID}
-          setState={setSessionID}
-        ></InputField>
-        <InputField field="Name" setState={setName} state={name}></InputField>
-        <Box mt={3}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => joinGame(name, sessionid)}
-          >
-            Join!
-          </Button>
-        </Box>
-      </Container>
-      {error ?? <ErrorPopUp setError={setError} errorr={error}></ErrorPopUp>}
+      <Grid
+        container
+        spacing={3}
+        justify="center"
+        alignItems="center"
+        direction="column"
+      >
+        <Grid item xs={2}></Grid>
+        <Grid item xs={10}>
+          <Container maxWidth="sm">
+            <Typography variant="h4" gutterBottom gutterTop>
+              Join the Session!
+            </Typography>
+            <InputField
+              field="Session ID"
+              state={sessionID}
+              setState={setSessionID}
+            ></InputField>
+            <InputField
+              field="Name"
+              setState={setName}
+              state={name}
+            ></InputField>
+            <Box mt={3}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => joinGame(name, sessionid)}
+              >
+                Join!
+              </Button>
+            </Box>
+          </Container>
+          {error ?? (
+            <ErrorPopUp setError={setError} errorr={error}></ErrorPopUp>
+          )}
+        </Grid>
+        <Grid item xs={2}></Grid>
+      </Grid>
     </>
   );
 }

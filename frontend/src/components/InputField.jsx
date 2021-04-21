@@ -8,6 +8,7 @@ function InputField(props) {
         onChange={(e) => props.setState(e.target.value)}
         label={props.field}
         value={props.state}
+        type={props.type ?? "text"}
       />
       {/* <input 
         type = {props.type ?? "text"}

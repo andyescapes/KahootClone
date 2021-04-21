@@ -114,128 +114,140 @@ function EditGame(props) {
 
   return (
     <>
-      {questions.map((question, index) => (
-        <Box m={3} mt={3} key={index}>
-          <GameCard
-            thumbnail={false}
-            title={question.question}
-            delete={deleteQuizQuestion}
-            id={gameid}
-            key={question.id}
-            questionId={question.id}
-            token={props.token}
-          ></GameCard>
-        </Box>
-      ))}
+      <Grid
+        container
+        spacing={3}
+        justify="center"
+        alignItems="center"
+        direction="column"
+      >
+        <Grid item xs={2}></Grid>
+        <Grid item xs={10}>
+          {questions.map((question, index) => (
+            <Box m={3} mt={3} key={index}>
+              <GameCard
+                thumbnail={false}
+                title={question.question}
+                delete={deleteQuizQuestion}
+                id={gameid}
+                key={question.id}
+                questionId={question.id}
+                token={props.token}
+              ></GameCard>
+            </Box>
+          ))}
 
-      <Box m={3} mt={3}>
-        <Typography variant="h5" gutterBottom>
-          New Question
-        </Typography>
+          <Box m={3} mt={3}>
+            <Typography variant="h5" gutterBottom>
+              New Question
+            </Typography>
 
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <InputField
-              field="Question"
-              setState={setQuestion}
-              state={question}
-            ></InputField>
-          </Grid>
-          <Grid item xs={6}>
-            <InputField
-              field="Time Limit"
-              setState={setTimeLimit}
-              state={timeLimit}
-            ></InputField>
-          </Grid>
-          <Grid item xs={6}>
-            <InputField
-              field="Points"
-              setState={setPoints}
-              state={points}
-            ></InputField>
-          </Grid>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <InputField
+                  field="Question"
+                  setState={setQuestion}
+                  state={question}
+                ></InputField>
+              </Grid>
+              <Grid item xs={6}>
+                <InputField
+                  field="Time Limit"
+                  setState={setTimeLimit}
+                  state={timeLimit}
+                ></InputField>
+              </Grid>
+              <Grid item xs={6}>
+                <InputField
+                  field="Points"
+                  setState={setPoints}
+                  state={points}
+                ></InputField>
+              </Grid>
 
-          <Grid item xs={6}>
-            <AnswerField
-              field="Correct Answer"
-              setAnswers={setAnswers}
-              answers={answers}
-              num={0}
-            ></AnswerField>
-          </Grid>
+              <Grid item xs={6}>
+                <AnswerField
+                  field="Correct Answer"
+                  setAnswers={setAnswers}
+                  answers={answers}
+                  num={0}
+                ></AnswerField>
+              </Grid>
 
-          <Grid item xs={6}>
-            <AnswerField
-              field="Answer 1"
-              setAnswers={setAnswers}
-              answers={answers}
-              num={1}
-            ></AnswerField>
-          </Grid>
-          <Grid item xs={6}>
-            <AnswerField
-              field="Answer 2"
-              setAnswers={setAnswers}
-              answers={answers}
-              num={2}
-            ></AnswerField>
-          </Grid>
-          <Grid item xs={6}>
-            <AnswerField
-              field="Answer 3"
-              setAnswers={setAnswers}
-              answers={answers}
-              num={3}
-            ></AnswerField>
-          </Grid>
-          <Grid item xs={6}>
-            <AnswerField
-              field="Answer 4"
-              setAnswers={setAnswers}
-              answers={answers}
-              num={4}
-            ></AnswerField>
-          </Grid>
-          <Grid item xs={6}>
-            <AnswerField
-              field="Answer 5"
-              setAnswers={setAnswers}
-              answers={answers}
-              num={5}
-            ></AnswerField>
-          </Grid>
-          <Grid item xs={6}></Grid>
-        </Grid>
+              <Grid item xs={6}>
+                <AnswerField
+                  field="Answer 1"
+                  setAnswers={setAnswers}
+                  answers={answers}
+                  num={1}
+                ></AnswerField>
+              </Grid>
+              <Grid item xs={6}>
+                <AnswerField
+                  field="Answer 2"
+                  setAnswers={setAnswers}
+                  answers={answers}
+                  num={2}
+                ></AnswerField>
+              </Grid>
+              <Grid item xs={6}>
+                <AnswerField
+                  field="Answer 3"
+                  setAnswers={setAnswers}
+                  answers={answers}
+                  num={3}
+                ></AnswerField>
+              </Grid>
+              <Grid item xs={6}>
+                <AnswerField
+                  field="Answer 4"
+                  setAnswers={setAnswers}
+                  answers={answers}
+                  num={4}
+                ></AnswerField>
+              </Grid>
+              <Grid item xs={6}>
+                <AnswerField
+                  field="Answer 5"
+                  setAnswers={setAnswers}
+                  answers={answers}
+                  num={5}
+                ></AnswerField>
+              </Grid>
+              <Grid item xs={6}></Grid>
+            </Grid>
 
-        {/* 
+            {/* 
       {questions.map((question) => (
         <h1>{question.name}</h1>
       ))} */}
-        <Button
-          color="primary"
-          variant="contained"
-          onClick={() => {
-            addQuizQuestion(props.token, gameid, [
-              ...questions,
-              {
-                id: newId(),
-                question: question,
-                questionType: "single",
-                timeLimit: timeLimit,
-                points: points,
-                image: "",
-                url: "",
-                answers: answers,
-              },
-            ]);
-          }}
-        >
-          Add Question
-        </Button>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => {
+                addQuizQuestion(props.token, gameid, [
+                  ...questions,
+                  {
+                    id: newId(),
+                    question: question,
+                    questionType: "single",
+                    timeLimit: timeLimit,
+                    points: points,
+                    image: "",
+                    url: "",
+                    answers: answers,
+                  },
+                ]);
+              }}
+            >
+              Add Question
+            </Button>
 
-        {renderError()}
-      </Box>
+            {renderError()}
+          </Box>
+        </Grid>
+        <Grid item xs={2}></Grid>
+      </Grid>
     </>
   );
 }

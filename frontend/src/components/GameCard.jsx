@@ -6,11 +6,11 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
-import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import ErrorPopUp from "../components/ErrorPopUp";
 import SessionModal from "../components/SessionModal";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { makeStyles } from "@material-ui/core";
 
 function GameCard(props) {
   const history = useHistory();
@@ -19,6 +19,7 @@ function GameCard(props) {
   const [sessionId, setSessionId] = React.useState("");
   const [activeSession, setActiveSession] = React.useState("");
   const [gameStopped, setGameStopped] = React.useState(false);
+  const [message, setMessage] = React.useState(false);
 
   const getQuizDetails = async (token, id) => {
     const request = await fetch(`http://localhost:5543/admin/quiz/${id}`, {
@@ -54,6 +55,8 @@ function GameCard(props) {
       if (command === "start") {
         // setActiveSessionPopUp(true);
         getQuizDetails(token, id);
+      } else if (command === "advance") {
+        setMessage("The Quiz moved on to the next Question");
       } else {
         setGameStopped(true);
       }
@@ -61,13 +64,23 @@ function GameCard(props) {
   };
 
   const endGameOnClick = () => {
-    history.push(`/results/${sessionId}`);
+    if (sessionId) {
+      history.push(`/results/${props.id}/${sessionId}`);
+    } else {
+      setMessage("You have not finished a game since you signed in");
+    }
   };
 
   const startGameOnClick = () => {
     navigator.clipboard.writeText(`http://localhost:3000/play/${sessionId}`);
   };
 
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      fontSize: "0.7em",
+    },
+  }));
+  const classes = useStyles();
   return (
     <div>
       <Card>
@@ -125,6 +138,7 @@ function GameCard(props) {
           <>
             <CardActions>
               <Button
+                className={classes.root}
                 size="small"
                 color="primary"
                 variant="contained"
@@ -136,6 +150,7 @@ function GameCard(props) {
                 Start Game
               </Button>
               <Button
+                className={classes.root}
                 size="small"
                 color="secondary"
                 variant="contained"
@@ -147,6 +162,7 @@ function GameCard(props) {
                 Stop Game
               </Button>{" "}
               <Button
+                className={classes.root}
                 size="small"
                 color="primary"
                 variant="contained"
@@ -158,12 +174,19 @@ function GameCard(props) {
                 Advance Question
               </Button>
               <Button
+                className={classes.root}
                 size="small"
                 color="primary"
                 variant="contained"
                 onClick={(event) => {
                   event.stopPropagation();
-                  history.push(`/results/${props.id}/${sessionId}`);
+                  if (sessionId) {
+                    history.push(`/results/${props.id}/${sessionId}`);
+                  } else {
+                    setMessage(
+                      "You have not finished a game since you signed in"
+                    );
+                  }
                 }}
               >
                 Last Results
@@ -189,6 +212,9 @@ function GameCard(props) {
           buttonMessage={"View Results"}
           onClickFn={endGameOnClick}
         ></SessionModal>
+      )}
+      {message && (
+        <ErrorPopUp title="" setError={setMessage} error={message}></ErrorPopUp>
       )}
     </div>
   );

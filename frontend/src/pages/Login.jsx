@@ -1,6 +1,6 @@
 import React from "react";
 import InputField from ".././components/InputField";
-import { Button, Typography, Container, Box } from "@material-ui/core";
+import { Button, Typography, Container, Box, Grid } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 
 function Login(props) {
@@ -38,31 +38,55 @@ function Login(props) {
 
   return (
     <>
-      <Container maxWidth="sm">
-        <Typography variant="h4" gutterBottom>
-          Sign in
-        </Typography>
-        <InputField
-          field="Email"
-          setState={setEmail}
-          state={email}
-        ></InputField>
-        <InputField
-          field="Password"
-          setState={setPassword}
-          state={password}
-          type="password"
-        ></InputField>
-        <Box mt={3}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => logIn(email, password)}
-          >
-            Log in!
-          </Button>
-        </Box>
-      </Container>
+      <Grid
+        container
+        spacing={3}
+        justify="center"
+        alignItems="center"
+        direction="column"
+      >
+        <Grid item xs={2}></Grid>
+        <Grid item xs={8}>
+          <Container maxWidth="sm">
+            <Typography variant="h4" gutterBottom>
+              Sign in
+            </Typography>
+            <InputField
+              field="Email"
+              setState={setEmail}
+              state={email}
+            ></InputField>
+            <InputField
+              field="Password"
+              setState={setPassword}
+              state={password}
+              type="password"
+            ></InputField>
+            <Box mt={3}>
+              <div className="buttonStyle">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => logIn(email, password)}
+                >
+                  Log in
+                </Button>
+
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    history.push("/register");
+                  }}
+                >
+                  Register
+                </Button>
+              </div>
+            </Box>
+          </Container>
+        </Grid>
+        <Grid item xs={2}></Grid>
+      </Grid>
     </>
   );
 }
