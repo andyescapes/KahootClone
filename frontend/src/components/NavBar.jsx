@@ -9,7 +9,7 @@ function NavBar(props) {
   const history = useHistory();
 
   const logOut = async (token) => {
-    const request = await fetch("http://localhost:5543/admin/auth/logout", {
+    const request = await fetch("http://localhost:5544/admin/auth/logout", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,

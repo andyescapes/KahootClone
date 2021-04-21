@@ -5,6 +5,7 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
+import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import ErrorPopUp from "../components/ErrorPopUp";
@@ -22,7 +23,7 @@ function GameCard(props) {
   const [message, setMessage] = React.useState(false);
 
   const getQuizDetails = async (token, id) => {
-    const request = await fetch(`http://localhost:5543/admin/quiz/${id}`, {
+    const request = await fetch(`http://localhost:5544/admin/quiz/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -36,7 +37,7 @@ function GameCard(props) {
 
   const gameApiCall = async (token, id, command) => {
     const request = await fetch(
-      `http://localhost:5543/admin/quiz/${id}/${command}`,
+      `http://localhost:5544/admin/quiz/${id}/${command}`,
       {
         method: "POST",
         headers: {
@@ -83,6 +84,7 @@ function GameCard(props) {
   const classes = useStyles();
   return (
     <div>
+      <Box mt ={1} mb={1}>
       <Card>
         <CardActionArea
           onClick={() =>
@@ -93,6 +95,7 @@ function GameCard(props) {
         >
           {props.thumbnail ?? (
             <CardMedia
+            
               component="img"
               height="140"
               image={props.thumbnail}
@@ -122,6 +125,7 @@ function GameCard(props) {
                 viewBox="0 0 329.26933 329"
                 width="329pt"
                 xmlns="http://www.w3.org/2000/svg"
+                aria-label="Close Card"
               >
                 <path d="m194.800781 164.769531 128.210938-128.214843c8.34375-8.339844 8.34375-21.824219 0-30.164063-8.339844-8.339844-21.824219-8.339844-30.164063 0l-128.214844 128.214844-128.210937-128.214844c-8.34375-8.339844-21.824219-8.339844-30.164063 0-8.34375 8.339844-8.34375 21.824219 0 30.164063l128.210938 128.214843-128.210938 128.214844c-8.34375 8.339844-8.34375 21.824219 0 30.164063 4.15625 4.160156 9.621094 6.25 15.082032 6.25 5.460937 0 10.921875-2.089844 15.082031-6.25l128.210937-128.214844 128.214844 128.214844c4.160156 4.160156 9.621094 6.25 15.082032 6.25 5.460937 0 10.921874-2.089844 15.082031-6.25 8.34375-8.339844 8.34375-21.824219 0-30.164063zm0 0" />
               </svg>
@@ -216,6 +220,7 @@ function GameCard(props) {
       {message && (
         <ErrorPopUp title="" setError={setMessage} error={message}></ErrorPopUp>
       )}
+      </Box>
     </div>
   );
 }

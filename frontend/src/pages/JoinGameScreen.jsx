@@ -31,7 +31,7 @@ function JoinGameScreen(props) {
       name: name,
     };
     const request = await fetch(
-      `http://localhost:5543/play/join/${sessionid}`,
+      `http://localhost:5544/play/join/${sessionid}`,
       {
         method: "POST",
         headers: {

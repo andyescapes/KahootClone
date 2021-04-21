@@ -28,7 +28,7 @@ function JoinGameScreen(props) {
 
   async function getResults(playerid) {
     const request = await fetch(
-      `http://localhost:5543/play/${playerid}/results`,
+      `http://localhost:5544/play/${playerid}/results`,
       {
         method: "GET",
         headers: {

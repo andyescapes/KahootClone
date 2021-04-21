@@ -1,5 +1,5 @@
 export const getQuizzes = async (token, setQuizzes) => {
-  const request = await fetch("http://localhost:5543/admin/quiz", {
+  const request = await fetch("http://localhost:5544/admin/quiz", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -18,7 +18,7 @@ export const newQuiz = async (token, name) => {
     name: name,
   };
 
-  const request = await fetch("http://localhost:5543/admin/quiz/new", {
+  const request = await fetch("http://localhost:5544/admin/quiz/new", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,

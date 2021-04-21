@@ -37,7 +37,7 @@ function EditGame(props) {
   console.log(answers, "lol");
   const getQuizDetails = async (token, id) => {
     console.log(id);
-    const request = await fetch(`http://localhost:5543/admin/quiz/${id}`, {
+    const request = await fetch(`http://localhost:5544/admin/quiz/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -94,7 +94,7 @@ function EditGame(props) {
     //   return;
     // }
     setError("");
-    const request = await fetch(`http://localhost:5543/admin/quiz/${id}`, {
+    const request = await fetch(`http://localhost:5544/admin/quiz/${id}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -333,6 +333,9 @@ function EditGame(props) {
       {questions.map((question) => (
         <h1>{question.name}</h1>
       ))} */}
+      <div className="buttonStyle">
+
+      
             <Button
               color="primary"
               variant="contained"
@@ -359,6 +362,9 @@ function EditGame(props) {
             >
               Save
             </Button>
+            <Button onClick ={()=>history.push(`/edit/${gameid}`)}>
+              Back
+            </Button></div>
             {renderError()}
           </Box>
         </Grid>

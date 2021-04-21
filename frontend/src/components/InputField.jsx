@@ -9,6 +9,7 @@ function InputField(props) {
         label={props.field}
         value={props.state}
         type={props.type ?? "text"}
+        name={props.field}
       />
       {/* <input 
         type = {props.type ?? "text"}

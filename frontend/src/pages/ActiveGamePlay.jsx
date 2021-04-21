@@ -70,7 +70,7 @@ function JoinGameScreen(props) {
 
   async function getQuestion(playerid) {
     const request = await fetch(
-      `http://localhost:5543/play/${playerid}/question`,
+      `http://localhost:5544/play/${playerid}/question`,
       {
         method: "GET",
         headers: {
@@ -120,7 +120,7 @@ function JoinGameScreen(props) {
   }
   async function getAnswer(playerid) {
     const request = await fetch(
-      `http://localhost:5543/play/${playerid}/answer`,
+      `http://localhost:5544/play/${playerid}/answer`,
       {
         method: "GET",
         headers: {
@@ -194,7 +194,7 @@ function JoinGameScreen(props) {
     const body = { answerIds: answerIds };
     console.log(body, "my answers");
     const request = await fetch(
-      `http://localhost:5543/play/${playerId}/answer`,
+      `http://localhost:5544/play/${playerId}/answer`,
       {
         method: "PUT",
         headers: {

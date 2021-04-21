@@ -17,7 +17,7 @@ function Login(props) {
     };
 
     async function logInRequest(body) {
-      const result = await fetch("http://localhost:5543/admin/auth/login", {
+      const result = await fetch("http://localhost:5544/admin/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -25,6 +25,7 @@ function Login(props) {
         body: JSON.stringify(body),
       });
       const tokenObject = await result.json();
+      console.log(result);
       console.log(tokenObject);
       props.setToken(tokenObject.token);
       if (result.status == "200") {

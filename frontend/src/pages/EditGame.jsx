@@ -34,7 +34,7 @@ function EditGame(props) {
 
   const getQuizDetails = async (token, id) => {
     console.log(id);
-    const request = await fetch(`http://localhost:5543/admin/quiz/${id}`, {
+    const request = await fetch(`http://localhost:5544/admin/quiz/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -61,7 +61,7 @@ function EditGame(props) {
       return;
     }
     setError("");
-    const request = await fetch(`http://localhost:5543/admin/quiz/${id}`, {
+    const request = await fetch(`http://localhost:5544/admin/quiz/${id}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -85,7 +85,7 @@ function EditGame(props) {
     const body = { questions: questionDeleted };
 
     console.log(questionDeleted);
-    const request = await fetch(`http://localhost:5543/admin/quiz/${gameId}`, {
+    const request = await fetch(`http://localhost:5544/admin/quiz/${gameId}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -221,10 +221,14 @@ function EditGame(props) {
       {questions.map((question) => (
         <h1>{question.name}</h1>
       ))} */}
+      <div className={"buttonStyle"}>
+
             <Button
               color="primary"
               variant="contained"
               onClick={() => {
+                const correctAnswerAdded = [...answers]
+                correctAnswerAdded[0].correct = true
                 addQuizQuestion(props.token, gameid, [
                   ...questions,
                   {
@@ -235,14 +239,16 @@ function EditGame(props) {
                     points: points,
                     image: "",
                     url: "",
-                    answers: answers,
+                    answers: correctAnswerAdded,
                   },
                 ]);
               }}
             >
               Add Question
             </Button>
-
+            <Button onClick ={()=>history.push("/dashboard")}>
+              Back
+            </Button></div>
             {renderError()}
           </Box>
         </Grid>
