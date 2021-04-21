@@ -134,12 +134,16 @@ function JoinGameScreen(props) {
       // setError(`${result.error}. Please wait until the admin starts the game`);
     } else if (request.status === 200) {
       let answerString = "The answer(s) was ";
-      result.answerIds.map((answer, index) => {
-        if (index === result.answerIds.length - 1) {
-          answerString += `${answer.answer}`;
-        } else {
-          answerString += `${answer.answer}, `;
-        }
+      result.answerIds.map((answerId, index) => {
+        answers.forEach((answerObject) => {
+          if (answerId === answerObject.id) {
+            if (index === result.answerIds.length - 1) {
+              answerString += `${answerObject.answer}`;
+            } else {
+              answerString += `${answerObject.answer}, `;
+            }
+          }
+        });
       });
       setModalMessage("Times up!");
       setError(answerString);
@@ -217,7 +221,7 @@ function JoinGameScreen(props) {
   //supposedly this polling works at the start and afte the timer is up, we need to get the answers though
   return (
     <>
-        <Grid
+      <Grid
         container
         spacing={3}
         justify="center"
@@ -226,89 +230,78 @@ function JoinGameScreen(props) {
       >
         <Grid item xs={2}></Grid>
         <Grid item xs={10}>
-            <Container maxWidth="sm">
-        {url && (
-          <iframe
-            src={url}
-            frameBorder="0"
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-            title="video"
-          />
-        )}
-        {image && (
-          <img
-            className={"image"}
-            src={image}
-            alt="Supplied image by question"
-          ></img>
-        )}
+          <Container maxWidth="sm">
+            {url && (
+              <iframe
+                src={url}
+                frameBorder="0"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+                title="video"
+              />
+            )}
+            {image && (
+              <img
+                className={"image"}
+                src={image}
+                alt="Supplied image by question"
+              ></img>
+            )}
 
-        {question && <Typography variant="h5">{question}</Typography>}
+            {question && <Typography variant="h5">{question}</Typography>}
 
-        {questionType == "multiple" && (
-          <Typography variant="h6">There are multiple answers</Typography>
-        )}
-        {timeLeft >= 0 && (
-          <Box m={3}>
-            <Container maxWidth="xl">
-              <Typography variant="h6">{timeLeft}</Typography>
-            </Container>
-          </Box>
-        )}
+            {questionType == "multiple" && (
+              <Typography variant="h6">There are multiple answers</Typography>
+            )}
+            {timeLeft >= 0 && (
+              <Box m={3}>
+                <Container maxWidth="xl">
+                  <Typography variant="h6">{timeLeft}</Typography>
+                </Container>
+              </Box>
+            )}
 
-        <Grid container spacing={1}>
-          {answers.map((answer) => (
-            <Grid item xs={6} key={answer.id}>
-              <Card>
-                <CardActionArea
-                  onClick={() => {
-                    selectAnswer(answer.id, questionType);
-                  }}
-                >
-                  <CardContent>
-                    <Typography variant="h6">
-                      {answer.answer}
-                      <Checkbox checked={answer.selected}></Checkbox>
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
+            <Grid container spacing={1}>
+              {answers.map((answer) => (
+                <Grid item xs={6} key={answer.id}>
+                  <Card>
+                    <CardActionArea
+                      onClick={() => {
+                        selectAnswer(answer.id, questionType);
+                      }}
+                    >
+                      <CardContent>
+                        <Typography variant="h6">
+                          {answer.answer}
+                          <Checkbox checked={answer.selected}></Checkbox>
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                </Grid>
+              ))}
             </Grid>
-          ))}
-        </Grid>
-        {/* <Box mt={3}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => joinGame(name, sessionid)}
-          >
-            Submit
-          </Button>
-        </Box> */}
-      </Container>
-      {error && (
-        <ErrorPopUp
-          setError={setError}
-          error={error}
-          title={modalMessage}
-        ></ErrorPopUp>
-      )}
-      {gameFinished && (
-        <SessionModal
-          setter={setGameFinished}
-          message="Game Finished!"
-          buttonMessage={"Results"}
-          onClickFn={() =>
-            history.push(`/play/${sessionid}/${playerid}/results`)
-          }
-        ></SessionModal>
-      )}
+          </Container>
+          {error && (
+            <ErrorPopUp
+              setError={setError}
+              error={error}
+              title={modalMessage}
+            ></ErrorPopUp>
+          )}
+          {gameFinished && (
+            <SessionModal
+              setter={setGameFinished}
+              message="Game Finished!"
+              buttonMessage={"Results"}
+              onClickFn={() =>
+                history.push(`/play/${sessionid}/${playerid}/results`)
+              }
+            ></SessionModal>
+          )}
         </Grid>
         <Grid item xs={2}></Grid>
       </Grid>
-
-    
     </>
   );
 }
