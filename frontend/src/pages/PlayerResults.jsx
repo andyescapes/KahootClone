@@ -1,8 +1,8 @@
-import React from "react";
-import "../App.css";
-import InputField from "../components/InputField";
-import AnswerField from "../components/AnswerField";
-import { useHistory, useParams } from "react-router-dom";
+import React from 'react';
+import '../App.css';
+import InputField from '../components/InputField';
+import AnswerField from '../components/AnswerField';
+import { useHistory, useParams } from 'react-router-dom';
 import {
   TableContainer,
   TableHead,
@@ -12,12 +12,12 @@ import {
   TableBody,
   Container,
   CardActionArea,
-} from "@material-ui/core";
-import { getQuizzes } from "../helper/api.js";
-import GameCard from "../components/GameCard";
-import ErrorPopUp from "../components/ErrorPopUp";
+} from '@material-ui/core';
+import { getQuizzes } from '../helper/api.js';
+import GameCard from '../components/GameCard';
+import ErrorPopUp from '../components/ErrorPopUp';
 
-function JoinGameScreen(props) {
+function JoinGameScreen (props) {
   const { playerid } = useParams();
   // const [sessionID, setSessionID] = React.useState("");
   const [results, setResults] = React.useState([]);
@@ -26,18 +26,18 @@ function JoinGameScreen(props) {
     getResults(playerid);
   }, []);
 
-  async function getResults(playerid) {
+  async function getResults (playerid) {
     const request = await fetch(
       `http://localhost:5544/play/${playerid}/results`,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       }
     );
     const result = await request.json();
-    console.log(result, "whats good");
+    console.log(result, 'whats good');
     if (request.status !== 200) {
       // setError(`${result.error}. Please wait until the admin starts the game`);
     } else if (request.status === 200) {
@@ -71,7 +71,7 @@ function JoinGameScreen(props) {
                     {index + 1}
                   </TableCell>
                   <TableCell align="right">
-                    {result.correct === true ? "✓" : "✕"}
+                    {result.correct === true ? '✓' : '✕'}
                   </TableCell>
                 </TableRow>
               ))}

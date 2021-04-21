@@ -42,6 +42,5 @@ AnswerField.propTypes = {
   setAnswers: PropTypes.func,
   num: PropTypes.number,
   field: PropTypes.string
-
 }
 export default AnswerField;

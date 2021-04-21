@@ -1,8 +1,6 @@
-import React from "react";
-import "../App.css";
-import InputField from "../components/InputField";
-import AnswerField from "../components/AnswerField";
-import { useHistory, useParams } from "react-router-dom";
+import React from 'react';
+import '../App.css';
+import { useHistory, useParams } from 'react-router-dom';
 import {
   Typography,
   Card,
@@ -12,43 +10,32 @@ import {
   CardContent,
   Container,
   CardActionArea,
-} from "@material-ui/core";
-import { getQuizzes } from "../helper/api.js";
-import SessionModal from "../components/SessionModal";
-import ErrorPopUp from "../components/ErrorPopUp";
+} from '@material-ui/core';
+import SessionModal from '../components/SessionModal';
+import ErrorPopUp from '../components/ErrorPopUp';
 
-function JoinGameScreen(props) {
+function ActiveGamePlay (props) {
   const { sessionid, playerid } = useParams();
-  // const [sessionID, setSessionID] = React.useState("");
-  const [modalMessage, setModalMessage] = React.useState("");
+  const [modalMessage, setModalMessage] = React.useState('');
   const [error, setError] = React.useState(false);
-  const [gameFinished, setGameFinished] = React.useState("");
-  const [question, setQuestion] = React.useState("");
+  const [gameFinished, setGameFinished] = React.useState('');
+  const [question, setQuestion] = React.useState('');
   const [answers, setAnswers] = React.useState([]);
-  const [image, setImage] = React.useState("");
-  const [url, setUrl] = React.useState("");
+  const [image, setImage] = React.useState('');
+  const [url, setUrl] = React.useState('');
   const [questionType, setQuestionType] = React.useState(true);
   const [timeLeft, setTimeLeft] = React.useState(-2);
-  const timerInterval = React.useRef(null);
   const serverPollRef = React.useRef(null);
-  const [pollServer, setPollServer] = React.useState(true);
   const history = useHistory();
 
   console.log(answers);
-  // React.useEffect(() => {
-  //   clearInterval(serverPollRef.current);
-  // }, [question]);
-  React.useEffect(() => {
-    // getQuestion(playerid);
-    if (pollServer) {
-      console.log("USE EFFECT ACTIVE");
-      serverPollRef.current = setInterval(() => {
-        console.log("im polling");
-        getQuestion(playerid);
-      }, 2000);
-    }
 
-    // return () => clearInterval(pollQuestion);
+  React.useEffect(() => {
+    console.log('USE EFFECT ACTIVE');
+    serverPollRef.current = setInterval(() => {
+      console.log('im polling');
+      getQuestion(playerid);
+    }, 2000);
   }, []);
 
   React.useEffect(() => {
@@ -56,10 +43,10 @@ function JoinGameScreen(props) {
       setTimeout(() => {
         if (timeLeft === -1) {
           setTimeLeft(-2);
-          console.log("what is this1");
+          console.log('what is this1');
           getAnswer(playerid);
           serverPollRef.current = setInterval(() => {
-            console.log("second interval active");
+            console.log('second interval active');
             getQuestion(playerid);
           }, 2000);
         }
@@ -68,28 +55,27 @@ function JoinGameScreen(props) {
     }
   }, [timeLeft]);
 
-  async function getQuestion(playerid) {
+  async function getQuestion (playerid) {
     const request = await fetch(
       `http://localhost:5544/play/${playerid}/question`,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       }
     );
     const result = await request.json();
     console.log(request);
     console.log(result);
-    if (result.error == "Session ID is not an active session") {
+    if (result.error === 'Session ID is not an active session') {
       setGameFinished(true);
       clearInterval(serverPollRef.current);
-    } else if (result.error == "Session has not started yet") {
+    } else if (result.error === 'Session has not started yet') {
       setModalMessage("Game hasn't started");
       setError(`${result.error}. Please wait until the admin starts the game`);
-    } else if (request.status === 200 && question != result.question.question) {
+    } else if (request.status === 200 && question !== result.question.question) {
       clearInterval(serverPollRef.current);
-      // setPollServer(false);
       setQuestion(result.question.question);
       setImage(result.question.image);
       setUrl(result.question.url);
@@ -118,23 +104,23 @@ function JoinGameScreen(props) {
       }
     }
   }
-  async function getAnswer(playerid) {
+  async function getAnswer (playerid) {
     const request = await fetch(
       `http://localhost:5544/play/${playerid}/answer`,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       }
     );
     const result = await request.json();
-    console.log(result, "whats good");
+    console.log(result, 'whats good');
     if (request.status !== 200) {
       // setError(`${result.error}. Please wait until the admin starts the game`);
     } else if (request.status === 200) {
-      let answerString = "The answer(s) was ";
-      result.answerIds.map((answerId, index) => {
+      let answerString = 'The answer(s) was ';
+      result.answerIds.forEach((answerId, index) => {
         answers.forEach((answerObject) => {
           if (answerId === answerObject.id) {
             if (index === result.answerIds.length - 1) {
@@ -145,7 +131,7 @@ function JoinGameScreen(props) {
           }
         });
       });
-      setModalMessage("Times up!");
+      setModalMessage('Times up!');
       setError(answerString);
     }
   }
@@ -153,10 +139,10 @@ function JoinGameScreen(props) {
   const selectAnswer = (id, questionType) => {
     const selectedAnswerIds = [];
 
-    if (questionType === "single") {
+    if (questionType === 'single') {
       const answersCopy = answers.map((answer) => {
         if (id === answer.id) {
-          answer.selected = answer.selected === true ? false : true;
+          answer.selected = answer.selected !== true;
           if (answer.selected === true) {
             selectedAnswerIds.push(answer.id);
           }
@@ -171,7 +157,7 @@ function JoinGameScreen(props) {
     } else {
       const answersCopy = answers.map((answer) => {
         if (id === answer.id) {
-          answer.selected = answer.selected === true ? false : true;
+          answer.selected = answer.selected !== true;
         }
         if (answer.selected === true) {
           selectedAnswerIds.push(answer.id);
@@ -180,25 +166,19 @@ function JoinGameScreen(props) {
       });
       setAnswers(answersCopy);
       sendPlayerAnswer(playerid, selectedAnswerIds);
-      //see if it actually sends i have no idea
+      // see if it actually sends i have no idea
     }
-  };
-
-  const timerBegins = () => {
-    timerInterval.current = setInterval(() => {
-      setTimeLeft((timer) => timeLeft - 1);
-    }, 1000);
   };
 
   const sendPlayerAnswer = async (playerId, answerIds) => {
     const body = { answerIds: answerIds };
-    console.log(body, "my answers");
+    console.log(body, 'my answers');
     const request = await fetch(
       `http://localhost:5544/play/${playerId}/answer`,
       {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),
       }
@@ -218,7 +198,7 @@ function JoinGameScreen(props) {
   //   //   getQuestion(playerid);
   //   // }, 2000);
   // }
-  //supposedly this polling works at the start and afte the timer is up, we need to get the answers though
+  // supposedly this polling works at the start and afte the timer is up, we need to get the answers though
   return (
     <>
       <Grid
@@ -242,7 +222,7 @@ function JoinGameScreen(props) {
             )}
             {image && (
               <img
-                className={"image"}
+                className={'image'}
                 src={image}
                 alt="Supplied image by question"
               ></img>
@@ -250,7 +230,7 @@ function JoinGameScreen(props) {
 
             {question && <Typography variant="h5">{question}</Typography>}
 
-            {questionType == "multiple" && (
+            {questionType === 'multiple' && (
               <Typography variant="h6">There are multiple answers</Typography>
             )}
             {timeLeft >= 0 && (
@@ -293,7 +273,7 @@ function JoinGameScreen(props) {
             <SessionModal
               setter={setGameFinished}
               message="Game Finished!"
-              buttonMessage={"Results"}
+              buttonMessage={'Results'}
               onClickFn={() =>
                 history.push(`/play/${sessionid}/${playerid}/results`)
               }
@@ -306,4 +286,4 @@ function JoinGameScreen(props) {
   );
 }
 
-export default JoinGameScreen;
+export default ActiveGamePlay;

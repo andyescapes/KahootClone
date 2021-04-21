@@ -1,12 +1,12 @@
-import React from "react";
-import InputField from ".././components/InputField";
-import { Button, Typography, Container, Box, Grid } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+import React from 'react';
+import InputField from '.././components/InputField';
+import { Button, Typography, Container, Box, Grid } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 
-function App(props) {
-  const [name, setName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+function App (props) {
+  const [name, setName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
   const history = useHistory();
 
   const registerUser = (inputEmail, inputPassword, inputName) => {
@@ -15,11 +15,11 @@ function App(props) {
       password: inputPassword,
       name: inputName,
     };
-    async function logInRequest(body) {
-      const result = await fetch("http://localhost:5544/admin/auth/register", {
-        method: "POST",
+    async function logInRequest (body) {
+      const result = await fetch('http://localhost:5544/admin/auth/register', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),
       });
@@ -27,7 +27,7 @@ function App(props) {
       console.log(tokenObject);
       props.setToken(tokenObject.token);
       if (request.status === 200) {
-        history.push("/dashboard");
+        history.push('/dashboard');
       }
     }
     logInRequest(body);
@@ -68,7 +68,7 @@ function App(props) {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => history.push("/login")}
+                  onClick={() => history.push('/login')}
                 >
                   Back
                 </Button>

@@ -1,16 +1,15 @@
-import React from "react";
-import InputField from "../components/InputField";
-import { useHistory } from "react-router-dom";
-import { AppBar, Toolbar, Button, Grid, Box } from "@material-ui/core";
-import { newQuiz, getQuizzes } from "../helper/api.js";
-import GameCard from "../components/GameCard";
+import React from 'react';
+import InputField from '../components/InputField';
+import { Button, Grid, Box } from '@material-ui/core';
+import { newQuiz, getQuizzes } from '../helper/api.js';
+import GameCard from '../components/GameCard';
+import PropTypes from 'prop-types';
 
-function Dashboard(props) {
-  const [quizName, setQuizName] = React.useState("");
-  const history = useHistory();
+function Dashboard (props) {
+  const [quizName, setQuizName] = React.useState('');
   const [quizzes, setQuizzes] = React.useState([]);
 
-  console.log("rerender dashboard");
+  console.log('rerender dashboard');
   React.useEffect(() => {
     getQuizzes(props.token, setQuizzes);
   }, []);
@@ -22,15 +21,15 @@ function Dashboard(props) {
 
   const deleteQuiz = async (token, id, setQuizzes, quizzes) => {
     const request = await fetch(`http://localhost:5544/admin/quiz/${id}`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
     const result = await request.json();
-    console.log(result, "done bro");
-    if (request.status == "200") {
+    console.log(result, 'done bro');
+    if (request.status === 200) {
       setQuizzes(
         quizzes.filter((quiz) => {
           return !(quiz.id === id);
@@ -83,6 +82,9 @@ function Dashboard(props) {
       </Grid>
     </>
   );
+}
+Dashboard.propTypes = {
+  token: PropTypes.string,
 }
 
 export default Dashboard;

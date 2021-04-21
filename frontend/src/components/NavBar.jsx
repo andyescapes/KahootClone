@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { AppBar, Toolbar, Button } from '@material-ui/core';
+import PropTypes from 'prop-types';
 
 function NavBar (props) {
   const history = useHistory();
@@ -15,7 +16,7 @@ function NavBar (props) {
     });
     const result = await request.json();
     console.log(result, 'hahahaS');
-    if (request.status == '200') history.push('/login');
+    if (request.status === 200) history.push('/login');
   };
 
   const homeLink = (e) => {
@@ -36,4 +37,7 @@ function NavBar (props) {
   );
 }
 
+NavBar.propTypes = {
+  token: PropTypes.string
+}
 export default NavBar;

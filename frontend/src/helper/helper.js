@@ -1,12 +1,12 @@
-export function fileToDataUrl(file) {
+export function fileToDataUrl (file) {
   if (!file) {
-    throw Error("Please upload an image to post");
+    throw Error('Please upload an image to post');
   }
-  const validFileTypes = ["image/jpeg", "image/png", "image/jpg"];
+  const validFileTypes = ['image/jpeg', 'image/png', 'image/jpg'];
   const valid = validFileTypes.find((type) => type === file.type);
   // Bad data, let's walk away.
   if (!valid) {
-    throw Error("provided file is not a png, jpg or jpeg image.");
+    throw Error('provided file is not a png, jpg or jpeg image.');
   }
 
   const reader = new FileReader();

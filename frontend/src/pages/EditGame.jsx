@@ -1,35 +1,31 @@
-import React from "react";
-
-import InputField from "../components/InputField";
-import AnswerField from "../components/AnswerField";
-import { useHistory, useParams } from "react-router-dom";
+import React from 'react';
+import InputField from '../components/InputField';
+import AnswerField from '../components/AnswerField';
+import { useHistory, useParams } from 'react-router-dom';
 import {
   Typography,
   Grid,
-  TextField,
   Box,
   Button,
-  Checkbox,
-} from "@material-ui/core";
-import { getQuizzes } from "../helper/api.js";
-import GameCard from "../components/GameCard";
+} from '@material-ui/core';
+import GameCard from '../components/GameCard';
+import PropTypes from 'prop-types';
 
-function EditGame(props) {
-  const [question, setQuestion] = React.useState("");
-  const [timeLimit, setTimeLimit] = React.useState("");
-  const [points, setPoints] = React.useState("");
+function EditGame (props) {
+  const [question, setQuestion] = React.useState('');
+  const [timeLimit, setTimeLimit] = React.useState('');
+  const [points, setPoints] = React.useState('');
   const [answers, setAnswers] = React.useState([0, 0, 0, 0, 0, 0]);
-  const [correctAnswer, setCorrectAnswer] = React.useState("");
-  const [error, setError] = React.useState("");
+  const [error, setError] = React.useState('');
 
   const history = useHistory();
   const { gameid } = useParams();
   const [questions, setQuestions] = React.useState([]);
 
-  const { randomBytes } = require("crypto");
+  const { randomBytes } = require('crypto');
 
   const newId = () => {
-    return randomBytes(16).toString("hex");
+    return randomBytes(16).toString('hex');
   };
 
   const getQuizDetails = async (token, id) => {
@@ -37,7 +33,7 @@ function EditGame(props) {
     const request = await fetch(`http://localhost:5544/admin/quiz/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
     const result = await request.json();
@@ -53,19 +49,19 @@ function EditGame(props) {
     const body = { questions: questionObject };
     console.log(body);
     if (!question || !timeLimit || !points) {
-      setError("All fields must be full");
+      setError('All fields must be full');
       return;
     }
     if (answers.filter((e) => e === 0).length > 4) {
-      setError("You need atleast another answer!");
+      setError('You need atleast another answer!');
       return;
     }
-    setError("");
+    setError('');
     const request = await fetch(`http://localhost:5544/admin/quiz/${id}`, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
     });
@@ -77,7 +73,7 @@ function EditGame(props) {
   const deleteQuizQuestion = async (token, gameId, questionId) => {
     console.log(questions);
     const questionDeleted = questions.filter((question) => {
-      console.log(question.id, "then", questionId);
+      console.log(question.id, 'then', questionId);
 
       return !(question.id === questionId);
     });
@@ -86,16 +82,16 @@ function EditGame(props) {
 
     console.log(questionDeleted);
     const request = await fetch(`http://localhost:5544/admin/quiz/${gameId}`, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
     });
     const result = await request.json();
     console.log(result);
-    if (request.status == 200) setQuestions(questionDeleted);
+    if (request.status === 200) setQuestions(questionDeleted);
   };
 
   React.useEffect(() => {
@@ -217,11 +213,11 @@ function EditGame(props) {
               <Grid item xs={6}></Grid>
             </Grid>
 
-            {/* 
+            {/*
       {questions.map((question) => (
         <h1>{question.name}</h1>
       ))} */}
-      <div className={"buttonStyle"}>
+      <div className={'buttonStyle'}>
 
             <Button
               color="primary"
@@ -234,11 +230,11 @@ function EditGame(props) {
                   {
                     id: newId(),
                     question: question,
-                    questionType: "single",
+                    questionType: 'single',
                     timeLimit: timeLimit,
                     points: points,
-                    image: "",
-                    url: "",
+                    image: '',
+                    url: '',
                     answers: correctAnswerAdded,
                   },
                 ]);
@@ -246,7 +242,7 @@ function EditGame(props) {
             >
               Add Question
             </Button>
-            <Button onClick ={()=>history.push("/dashboard")}>
+            <Button onClick ={() => history.push('/dashboard')}>
               Back
             </Button></div>
             {renderError()}
@@ -256,6 +252,9 @@ function EditGame(props) {
       </Grid>
     </>
   );
+}
+EditGame.propTypes = {
+  token: PropTypes.string,
 }
 
 export default EditGame;

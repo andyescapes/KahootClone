@@ -1,9 +1,8 @@
-import React from "react";
+import React from 'react';
 
-import InputField from "../components/InputField";
-import AnswerField from "../components/AnswerField";
-import { fileToDataUrl } from "../helper/helper";
-import { useHistory, useParams } from "react-router-dom";
+import InputField from '../components/InputField';
+import { fileToDataUrl } from '../helper/helper';
+import { useHistory, useParams } from 'react-router-dom';
 import {
   Typography,
   Grid,
@@ -11,36 +10,34 @@ import {
   Box,
   Button,
   Checkbox,
-} from "@material-ui/core";
-import { getQuizzes } from "../helper/api.js";
-import GameCard from "../components/GameCard";
+} from '@material-ui/core';
 
-function EditGame(props) {
-  const [question, setQuestion] = React.useState("");
-  const [timeLimit, setTimeLimit] = React.useState("");
-  const [points, setPoints] = React.useState("");
+function EditGame (props) {
+  const [question, setQuestion] = React.useState('');
+  const [timeLimit, setTimeLimit] = React.useState('');
+  const [points, setPoints] = React.useState('');
   const [answers, setAnswers] = React.useState([0, 0, 0, 0, 0, 0]);
-  const [error, setError] = React.useState("");
-  const [url, setUrl] = React.useState("");
-  const [image, setImage] = React.useState("");
+  const [error, setError] = React.useState('');
+  const [url, setUrl] = React.useState('');
+  const [image, setImage] = React.useState('');
 
   const history = useHistory();
   const { gameid, questionid } = useParams();
   const [questions, setQuestions] = React.useState([]);
 
-  const { randomBytes } = require("crypto");
+  const { randomBytes } = require('crypto');
 
   const newId = () => {
-    return randomBytes(16).toString("hex");
+    return randomBytes(16).toString('hex');
   };
 
-  console.log(answers, "lol");
+  console.log(answers, 'lol');
   const getQuizDetails = async (token, id) => {
     console.log(id);
     const request = await fetch(`http://localhost:5544/admin/quiz/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
     const result = await request.json();
@@ -67,46 +64,45 @@ function EditGame(props) {
     questions,
     questionObject
   ) => {
-    //remove the
+    // remove the
     const editedQuestionsArray = questions.filter((question) => {
       return !(question.id === questionid);
     });
     editedQuestionsArray.push(questionObject);
 
     const body = { questions: editedQuestionsArray };
-    console.log(body, "this is the body");
+    console.log(body, 'this is the body');
     if (!question || !timeLimit || !points) {
-      setError("All fields must be full");
+      setError('All fields must be full');
       return;
     }
     if (answers.filter((e) => e === 0).length > 4) {
-      console.log(answers, "whats going on here");
-      setError("You need atleast another answer!");
+      console.log(answers, 'whats going on here');
+      setError('You need atleast another answer!');
       return;
     }
     if (answers.filter((e) => e.correct === true).length === 0) {
-      console.log(answers, "whats going on here");
-      setError("You need atleast one correct answer!");
+      console.log(answers, 'whats going on here');
+      setError('You need atleast one correct answer!');
       return;
     }
 
     // if (error.length > 0) {
     //   return;
     // }
-    setError("");
+    setError('');
     const request = await fetch(`http://localhost:5544/admin/quiz/${id}`, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
     });
-    const result = await request.json();
     console.log(request.status);
     setQuestions(questionObject);
     if (request.status === 200) {
-      setError("success");
+      setError('success');
     }
   };
 
@@ -116,10 +112,10 @@ function EditGame(props) {
 
   const setCorrectAnswerState = (index, answers) => {
     const answersCopy = [...answers];
-    //delete if input is 0
+    // delete if input is 0
     if (answersCopy[index] !== 0) {
       answersCopy[index].correct =
-        answersCopy[index].correct == false ? true : false;
+        answersCopy[index].correct == false;
       setAnswers(answersCopy);
     }
 
@@ -128,14 +124,14 @@ function EditGame(props) {
 
   const setAnswerState = (value, index, answers) => {
     const answersCopy = [...answers];
-    //delete if input is 0
+    // delete if input is 0
     if (value.length === 0) {
       answersCopy[index] = 0;
     } else {
-      //if answer was never set create new id
+      // if answer was never set create new id
       if (answersCopy[index] === 0) {
         answersCopy[index] = { id: newId(), answer: value };
-        //if answer is set change the value
+        // if answer is set change the value
       } else {
         answersCopy[index].answer = value;
       }
@@ -153,7 +149,7 @@ function EditGame(props) {
         // console.log(split_64_encoded[1]);
         setImage(res);
       });
-      setError("");
+      setError('');
     } catch (e) {
       setError(e.message);
     }
@@ -161,7 +157,7 @@ function EditGame(props) {
 
   const renderError = () => {
     if (error) {
-      if (error === "success") {
+      if (error === 'success') {
         return (
           <Typography color="primary" variant="h5" display="block">
             Success!
@@ -232,7 +228,7 @@ function EditGame(props) {
                     onChange={(e) => {
                       setAnswerState(e.target.value, 0, answers);
                     }}
-                    value={answers[0].answer || ""}
+                    value={answers[0].answer || ''}
                   ></TextField>
                   <Checkbox
                     onChange={() => setCorrectAnswerState(0, answers)}
@@ -247,7 +243,7 @@ function EditGame(props) {
                     onChange={(e) => {
                       setAnswerState(e.target.value, 1, answers);
                     }}
-                    value={answers[1].answer || ""}
+                    value={answers[1].answer || ''}
                   ></TextField>
                   <Checkbox
                     onChange={() => setCorrectAnswerState(1, answers)}
@@ -262,7 +258,7 @@ function EditGame(props) {
                     onChange={(e) => {
                       setAnswerState(e.target.value, 2, answers);
                     }}
-                    value={answers[2].answer || ""}
+                    value={answers[2].answer || ''}
                   ></TextField>
                   <Checkbox
                     onChange={() => setCorrectAnswerState(2, answers)}
@@ -277,7 +273,7 @@ function EditGame(props) {
                     onChange={(e) => {
                       setAnswerState(e.target.value, 3, answers);
                     }}
-                    value={answers[3].answer || ""}
+                    value={answers[3].answer || ''}
                   ></TextField>
                   <Checkbox
                     onChange={() => setCorrectAnswerState(3, answers)}
@@ -292,7 +288,7 @@ function EditGame(props) {
                     onChange={(e) => {
                       setAnswerState(e.target.value, 4, answers);
                     }}
-                    value={answers[4].answer || ""}
+                    value={answers[4].answer || ''}
                   ></TextField>
                   <Checkbox
                     onChange={() => setCorrectAnswerState(4, answers)}
@@ -307,7 +303,7 @@ function EditGame(props) {
                     onChange={(e) => {
                       setAnswerState(e.target.value, 5, answers);
                     }}
-                    value={answers[5].answer || ""}
+                    value={answers[5].answer || ''}
                   ></TextField>
                   <Checkbox
                     onChange={() => setCorrectAnswerState(5, answers)}
@@ -318,7 +314,7 @@ function EditGame(props) {
                   <div>
                     <Typography variant="body2">URL</Typography>
                   </div>
-                  <InputField setState={setUrl} state={url || ""}></InputField>
+                  <InputField setState={setUrl} state={url || ''}></InputField>
                 </Grid>
 
                 <Grid item xs={6}>
@@ -329,25 +325,24 @@ function EditGame(props) {
                 </Grid>
               </Grid>
             </Box>
-            {/* 
+            {/*
       {questions.map((question) => (
         <h1>{question.name}</h1>
       ))} */}
       <div className="buttonStyle">
 
-      
             <Button
               color="primary"
               variant="contained"
               onClick={() => {
-                const splitLink = url.split("watch?v=");
-                const embedLink = splitLink.join("embed/");
+                const splitLink = url.split('watch?v=');
+                const embedLink = splitLink.join('embed/');
                 const questionType =
                   answers.filter((answer) => {
                     return answer.correct == true;
                   }).length > 1
-                    ? "multiple"
-                    : "single";
+                    ? 'multiple'
+                    : 'single';
                 saveQuizQuestion(props.token, gameid, questionid, questions, {
                   id: questionid,
                   question: question,
@@ -362,7 +357,7 @@ function EditGame(props) {
             >
               Save
             </Button>
-            <Button onClick ={()=>history.push(`/edit/${gameid}`)}>
+            <Button onClick ={() => history.push(`/edit/${gameid}`)}>
               Back
             </Button></div>
             {renderError()}
