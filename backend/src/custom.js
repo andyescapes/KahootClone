@@ -36,9 +36,13 @@ export const quizQuestionPublicReturn = (question) => {
  the correct answers (minimum 1).
 */
 export const quizQuestionGetCorrectAnswers = (question) => {
-  return question.answers.filter((answer) => {
-    return answer.correct === true;
+  const correctAnswers = [];
+  question.answers.map((answer) => {
+    if (answer.correct === true) {
+      correctAnswers.push(answer.id);
+    }
   }); // For a single answer
+  return correctAnswers;
 };
 
 /*

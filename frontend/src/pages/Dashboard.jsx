@@ -10,6 +10,7 @@ function Dashboard(props) {
   const history = useHistory();
   const [quizzes, setQuizzes] = React.useState([]);
 
+  console.log("rerender dashboard");
   React.useEffect(() => {
     getQuizzes(props.token, setQuizzes);
   }, []);

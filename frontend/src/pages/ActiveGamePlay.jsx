@@ -14,27 +14,34 @@ import {
   CardActionArea,
 } from "@material-ui/core";
 import { getQuizzes } from "../helper/api.js";
-import GameCard from "../components/GameCard";
+import SessionModal from "../components/SessionModal";
 import ErrorPopUp from "../components/ErrorPopUp";
 
 function JoinGameScreen(props) {
   const { sessionid, playerid } = useParams();
   // const [sessionID, setSessionID] = React.useState("");
+  const [modalMessage, setModalMessage] = React.useState("");
   const [error, setError] = React.useState(false);
+  const [gameFinished, setGameFinished] = React.useState("");
   const [question, setQuestion] = React.useState("");
   const [answers, setAnswers] = React.useState([]);
   const [image, setImage] = React.useState("");
   const [url, setUrl] = React.useState("");
   const [questionType, setQuestionType] = React.useState(true);
-  const [timeLeft, setTimeLeft] = React.useState(-1);
+  const [timeLeft, setTimeLeft] = React.useState(-2);
   const timerInterval = React.useRef(null);
   const serverPollRef = React.useRef(null);
   const [pollServer, setPollServer] = React.useState(true);
+  const history = useHistory();
 
   console.log(answers);
+  // React.useEffect(() => {
+  //   clearInterval(serverPollRef.current);
+  // }, [question]);
   React.useEffect(() => {
     // getQuestion(playerid);
     if (pollServer) {
+      console.log("USE EFFECT ACTIVE");
       serverPollRef.current = setInterval(() => {
         console.log("im polling");
         getQuestion(playerid);
@@ -45,8 +52,17 @@ function JoinGameScreen(props) {
   }, []);
 
   React.useEffect(() => {
-    if (timeLeft >= 0) {
+    if (timeLeft >= -1) {
       setTimeout(() => {
+        if (timeLeft === -1) {
+          setTimeLeft(-2);
+          console.log("what is this1");
+          getAnswer(playerid);
+          serverPollRef.current = setInterval(() => {
+            console.log("second interval active");
+            getQuestion(playerid);
+          }, 2000);
+        }
         setTimeLeft(timeLeft - 1);
       }, 1000);
     }
@@ -65,11 +81,15 @@ function JoinGameScreen(props) {
     const result = await request.json();
     console.log(request);
     console.log(result);
-    if (request.status !== 200) {
-      setError(`${result.error}. Please wait until the admin starts the game`);
-    } else if (request.status === 200) {
+    if (result.error == "Session ID is not an active session") {
+      setGameFinished(true);
       clearInterval(serverPollRef.current);
-      setPollServer(false);
+    } else if (result.error == "Session has not started yet") {
+      setModalMessage("Game hasn't started");
+      setError(`${result.error}. Please wait until the admin starts the game`);
+    } else if (request.status === 200 && question != result.question.question) {
+      clearInterval(serverPollRef.current);
+      // setPollServer(false);
       setQuestion(result.question.question);
       setImage(result.question.image);
       setUrl(result.question.url);
@@ -113,6 +133,16 @@ function JoinGameScreen(props) {
     if (request.status !== 200) {
       // setError(`${result.error}. Please wait until the admin starts the game`);
     } else if (request.status === 200) {
+      let answerString = "The answer(s) was ";
+      result.answerIds.map((answer, index) => {
+        if (index === result.answerIds.length - 1) {
+          answerString += `${answer.answer}`;
+        } else {
+          answerString += `${answer.answer}, `;
+        }
+      });
+      setModalMessage("Times up!");
+      setError(answerString);
     }
   }
 
@@ -158,7 +188,7 @@ function JoinGameScreen(props) {
 
   const sendPlayerAnswer = async (playerId, answerIds) => {
     const body = { answerIds: answerIds };
-
+    console.log(body, "my answers");
     const request = await fetch(
       `http://localhost:5543/play/${playerId}/answer`,
       {
@@ -173,15 +203,17 @@ function JoinGameScreen(props) {
     console.log(result);
   };
 
-  if (timeLeft === -1) {
-    clearInterval(timerInterval.current);
-    setTimeLeft(-2);
-    getAnswer(playerid);
-    // serverPollRef.current = setInterval(() => {
-    //   console.log("im polling");
-    //   getQuestion(playerid);
-    // }, 2000);
-  }
+  // if (timeLeft === -1) {
+  //   setTimeLeft(-2);
+  //   console.log("what is this1");
+  //   // clearInterval(timerInterval.current);
+  //   // console.log("what is this2");
+  //   getAnswer(playerid);
+  //   // serverPollRef.current = setInterval(() => {
+  //   //   console.log("second interval active");
+  //   //   getQuestion(playerid);
+  //   // }, 2000);
+  // }
   //supposedly this polling works at the start and afte the timer is up, we need to get the answers though
   return (
     <>
@@ -246,7 +278,23 @@ function JoinGameScreen(props) {
           </Button>
         </Box> */}
       </Container>
-      {error && <ErrorPopUp setError={setError} error={error}></ErrorPopUp>}
+      {error && (
+        <ErrorPopUp
+          setError={setError}
+          error={error}
+          title={modalMessage}
+        ></ErrorPopUp>
+      )}
+      {gameFinished && (
+        <SessionModal
+          setter={setGameFinished}
+          message="Game Finished!"
+          buttonMessage={"Results"}
+          onClickFn={() =>
+            history.push(`/play/${sessionid}/${playerid}/results`)
+          }
+        ></SessionModal>
+      )}
     </>
   );
 }

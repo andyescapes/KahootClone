@@ -125,6 +125,7 @@ function GameCard(props) {
           <>
             <CardActions>
               <Button
+                size="small"
                 color="primary"
                 variant="contained"
                 onClick={(event) => {
@@ -135,6 +136,7 @@ function GameCard(props) {
                 Start Game
               </Button>
               <Button
+                size="small"
                 color="secondary"
                 variant="contained"
                 onClick={(event) => {
@@ -145,6 +147,7 @@ function GameCard(props) {
                 Stop Game
               </Button>{" "}
               <Button
+                size="small"
                 color="primary"
                 variant="contained"
                 onClick={(event) => {
@@ -153,6 +156,17 @@ function GameCard(props) {
                 }}
               >
                 Advance Question
+              </Button>
+              <Button
+                size="small"
+                color="primary"
+                variant="contained"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  history.push(`/results/${props.id}/${sessionId}`);
+                }}
+              >
+                Last Results
               </Button>
             </CardActions>
           </>

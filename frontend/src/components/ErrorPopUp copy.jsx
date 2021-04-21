@@ -51,7 +51,7 @@ export default function ErrorPopUp(props) {
           >
             <Fade in={open}>
               <div className={classes.paper}>
-                <h2 id="transition-modal-title">{props.title ?? "Error"}</h2>
+                <h2 id="transition-modal-title">{props.title}</h2>
                 <p id="transition-modal-description">{props.error}</p>
               </div>
             </Fade>

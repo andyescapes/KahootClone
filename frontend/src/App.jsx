@@ -9,6 +9,8 @@ import EditQuestion from "./pages/EditQuestion";
 import JoinGameScreen from "./pages/JoinGameScreen";
 import Results from "./pages/Results";
 import ActiveGamePlay from "./pages/ActiveGamePlay";
+import PlayerResults from "./pages/PlayerResults";
+
 import {
   useHistory,
   BrowserRouter as Switch,
@@ -49,7 +51,7 @@ function App() {
           <NavBar token={token}></NavBar>
           <EditQuestion token={token}></EditQuestion>
         </Route>
-        <Route exact path="/results/:sessionid">
+        <Route exact path="/results/:gameid/:sessionid">
           <NavBar token={token}></NavBar>
           <Results token={token}></Results>
         </Route>
@@ -60,6 +62,10 @@ function App() {
         <Route exact path="/play/:sessionid/:playerid">
           <NavBar token={token}></NavBar>
           <ActiveGamePlay token={token}></ActiveGamePlay>
+        </Route>
+        <Route exact path="/play/:sessionid/:playerid/results">
+          <NavBar token={token}></NavBar>
+          <PlayerResults token={token}></PlayerResults>
         </Route>
 
         <Route exact path="/">
