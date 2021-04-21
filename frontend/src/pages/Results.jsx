@@ -1,8 +1,5 @@
-import React from "react";
-
-import InputField from "../components/InputField";
-import AnswerField from "../components/AnswerField";
-import { useHistory, useParams } from "react-router-dom";
+import React from 'react';
+import { useParams } from 'react-router-dom';
 import {
   TableContainer,
   TableHead,
@@ -14,17 +11,16 @@ import {
   Grid,
   Typography,
   Box
-} from "@material-ui/core";
-import { getQuizzes } from "../helper/api.js";
-import GameCard from "../components/GameCard";
-import {Bar, Line, Pie} from 'react-chartjs-2'
+} from '@material-ui/core';
+import { Bar } from 'react-chartjs-2'
+import PropTypes from 'prop-types';
 
-function Results(props) {
+function Results (props) {
   const { gameid, sessionid } = useParams();
   const [scores, setScores] = React.useState([]);
   const [avgResponse, setAvgResponse] = React.useState([]);
-  const [chartData, setChartData] = React.useState("");
-  
+  const [chartData, setChartData] = React.useState('');
+
   const options = {
     scales: {
       yAxes: [
@@ -39,16 +35,16 @@ function Results(props) {
 
   React.useEffect(() => {
     getOverallResultsAndQuizDetails(props.token, sessionid, gameid);
-    //getQuizDetails(props.token, gameid);
+    // getQuizDetails(props.token, gameid);
   }, []);
 
   const getOverallResultsAndQuizDetails = async (token, sessionId, id) => {
     const request = await fetch(
       `http://localhost:5544/admin/session/${sessionId}/results`,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
       }
@@ -56,11 +52,11 @@ function Results(props) {
     const result = await request.json();
     console.log(result);
 
-    //getting quiz question information
+    // getting quiz question information
     const quizRequest = await fetch(`http://localhost:5544/admin/quiz/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
     const quizResult = await quizRequest.json();
@@ -73,11 +69,11 @@ function Results(props) {
       const playerResults = result.results
       const quizQuestions = quizResult.questions
 
-      //calculate players with the highest score
+      // calculate players with the highest score
       const playerScoreInfo = [];
-      playerResults.map((result, index) => {
+      playerResults.forEach((result, index) => {
         const playerObject = { name: result.name, score: 0 };
-        result.answers.map((answer, answerIndex) => {
+        result.answers.forEach((answer, answerIndex) => {
           if (answer.correct === true) {
             playerObject.score =
               parseInt(playerObject.score, 10) +
@@ -87,58 +83,56 @@ function Results(props) {
         playerScoreInfo.push(playerObject);
       });
       playerScoreInfo.sort(
-          (a, b) => parseFloat(b.score) - parseFloat(a.score)
-        )
-      if(playerScoreInfo > 5){
+        (a, b) => parseFloat(b.score) - parseFloat(a.score)
+      )
+      if (playerScoreInfo > 5) {
         const subtract = playerResults.length - 5
         playerScoreInfo.length -= subtract
       }
       setScores(playerScoreInfo);
       console.log(playerScoreInfo);
 
-      //calculate answer percentage
+      // calculate answer percentage
       const averageResponseTimes = new Array(quizQuestions.length).fill(0);
-      playerResults.map(user =>{
-        user.answers.forEach((answer, index)=>{
+      playerResults.forEach(user => {
+        user.answers.forEach((answer, index) => {
           const questionStarted = new Date(answer.questionStartedAt)
           const questionAnswered = new Date(answer.answeredAt)
-          if(!questionAnswered){
-            averageResponseTimes[index] +=answer.timeLimit
-          }else{
-            averageResponseTimes[index] += (questionAnswered.getTime() - questionStarted.getTime())/1000
+          if (!questionAnswered) {
+            averageResponseTimes[index] += answer.timeLimit
+          } else {
+            averageResponseTimes[index] += (questionAnswered.getTime() - questionStarted.getTime()) / 1000
           }
-          
         })
       })
 
-      setAvgResponse(averageResponseTimes.map(response =>{
-        return (response/result.results.length).toFixed(3)
+      setAvgResponse(averageResponseTimes.map(response => {
+        return (response / result.results.length).toFixed(3)
       }))
-      console.log(averageResponseTimes, "Resp");
+      console.log(averageResponseTimes, 'Resp');
 
-      //get data for bar graph, breakdown of percentage of people who got questions right
+      // get data for bar graph, breakdown of percentage of people who got questions right
       const percentageCorrectPerQuestion = new Array(quizQuestions.length).fill(0);
-      
-      playerResults.map(user =>{
-        user.answers.forEach((answer, index)=>{
-          if(answer.correct=== true){
+
+      playerResults.forEach(user => {
+        user.answers.forEach((answer, index) => {
+          if (answer.correct === true) {
             percentageCorrectPerQuestion[index] += 1
           }
-          
         })
       })
-      console.log(percentageCorrectPerQuestion, "percentage yooooooooo")
+      console.log(percentageCorrectPerQuestion, 'percentage yooooooooo')
 
       setChartData(
         {
-          labels: quizQuestions.map((question,index)=>{
-            return (index+1)
+          labels: quizQuestions.map((question, index) => {
+            return (index + 1)
           }),
           datasets: [
             {
               label: '% of users who answered correctly by question',
-              data: percentageCorrectPerQuestion.map(element=>{
-                return (element/playerResults.length.toFixed(3))*100
+              data: percentageCorrectPerQuestion.map(element => {
+                return (element / playerResults.length.toFixed(3)) * 100
               }),
               backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
@@ -226,5 +220,7 @@ function Results(props) {
     </>
   );
 }
-
+Results.propTypes = {
+  token: PropTypes.string
+}
 export default Results;

@@ -1,41 +1,35 @@
-import React from "react";
-
-import InputField from "../components/InputField";
-import AnswerField from "../components/AnswerField";
-import { useHistory, useParams } from "react-router-dom";
+import React from 'react';
+import InputField from '../components/InputField';
+import { useHistory, useParams } from 'react-router-dom';
 import {
   Typography,
   Grid,
-  TextField,
   Box,
   Button,
-  Drawer,
   Container,
-} from "@material-ui/core";
-import { getQuizzes } from "../helper/api.js";
-import GameCard from "../components/GameCard";
-import ErrorPopUp from "../components/ErrorPopUp";
+} from '@material-ui/core';
+import ErrorPopUp from '../components/ErrorPopUp';
 
-function JoinGameScreen(props) {
+function JoinGameScreen (props) {
   const { sessionid } = useParams();
-  const [name, setName] = React.useState("");
-  const [sessionID, setSessionID] = React.useState("");
+  const [name, setName] = React.useState('');
+  const [sessionID, setSessionID] = React.useState('');
   const [error, setError] = React.useState(false);
   const history = useHistory();
   React.useEffect(() => {
     setSessionID(sessionid);
   }, []);
 
-  async function joinGame(name, sessionid) {
+  async function joinGame (name, sessionid) {
     const body = {
       name: name,
     };
     const request = await fetch(
       `http://localhost:5544/play/join/${sessionid}`,
       {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),
       }

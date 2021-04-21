@@ -11,6 +11,7 @@ import {
   Button,
   Checkbox,
 } from '@material-ui/core';
+import PropTypes from 'prop-types';
 
 function EditGame (props) {
   const [question, setQuestion] = React.useState('');
@@ -115,7 +116,7 @@ function EditGame (props) {
     // delete if input is 0
     if (answersCopy[index] !== 0) {
       answersCopy[index].correct =
-        answersCopy[index].correct == false;
+        answersCopy[index].correct === false;
       setAnswers(answersCopy);
     }
 
@@ -339,7 +340,7 @@ function EditGame (props) {
                 const embedLink = splitLink.join('embed/');
                 const questionType =
                   answers.filter((answer) => {
-                    return answer.correct == true;
+                    return answer.correct === true;
                   }).length > 1
                     ? 'multiple'
                     : 'single';
@@ -368,5 +369,7 @@ function EditGame (props) {
     </>
   );
 }
-
+EditGame.propTypes = {
+  token: PropTypes.string,
+}
 export default EditGame;

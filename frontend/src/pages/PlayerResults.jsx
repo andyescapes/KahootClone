@@ -1,8 +1,6 @@
 import React from 'react';
 import '../App.css';
-import InputField from '../components/InputField';
-import AnswerField from '../components/AnswerField';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import {
   TableContainer,
   TableHead,
@@ -11,11 +9,7 @@ import {
   Table,
   TableBody,
   Container,
-  CardActionArea,
 } from '@material-ui/core';
-import { getQuizzes } from '../helper/api.js';
-import GameCard from '../components/GameCard';
-import ErrorPopUp from '../components/ErrorPopUp';
 
 function JoinGameScreen (props) {
   const { playerid } = useParams();

@@ -2,8 +2,9 @@ import React from 'react';
 import InputField from '.././components/InputField';
 import { Button, Typography, Container, Box, Grid } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-function App (props) {
+function Register (props) {
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -26,7 +27,7 @@ function App (props) {
       const tokenObject = await result.json();
       console.log(tokenObject);
       props.setToken(tokenObject.token);
-      if (request.status === 200) {
+      if (result.status === 200) {
         history.push('/dashboard');
       }
     }
@@ -81,5 +82,7 @@ function App (props) {
     </>
   );
 }
-
-export default App;
+Register.propTypes = {
+  setToken: PropTypes.func,
+}
+export default Register;

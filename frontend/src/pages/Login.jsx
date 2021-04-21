@@ -1,11 +1,12 @@
-import React from "react";
-import InputField from ".././components/InputField";
-import { Button, Typography, Container, Box, Grid } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+import React from 'react';
+import InputField from '.././components/InputField';
+import { Button, Typography, Container, Box, Grid } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-function Login(props) {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+function Login (props) {
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
   const history = useHistory();
   console.log(email);
   console.log(password);
@@ -16,11 +17,11 @@ function Login(props) {
       password: inputPassword,
     };
 
-    async function logInRequest(body) {
-      const result = await fetch("http://localhost:5544/admin/auth/login", {
-        method: "POST",
+    async function logInRequest (body) {
+      const result = await fetch('http://localhost:5544/admin/auth/login', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),
       });
@@ -28,9 +29,9 @@ function Login(props) {
       console.log(result);
       console.log(tokenObject);
       props.setToken(tokenObject.token);
-      if (result.status == "200") {
+      if (result.status === '200') {
         props.setIsLoggedIn(true);
-        history.push("/dashboard");
+        history.push('/dashboard');
       }
     }
 
@@ -77,7 +78,7 @@ function Login(props) {
                   variant="contained"
                   color="primary"
                   onClick={() => {
-                    history.push("/register");
+                    history.push('/register');
                   }}
                 >
                   Register
@@ -91,5 +92,9 @@ function Login(props) {
     </>
   );
 }
-
+Login.propTypes = {
+  token: PropTypes.string,
+  setToken: PropTypes.func,
+  Dashboard: PropTypes.bool,
+}
 export default Login;
