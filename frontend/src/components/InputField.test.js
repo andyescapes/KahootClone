@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 import renderer from 'react-test-renderer';
-import InputField from './components/InputField';
+import InputField from './InputField';
 import TextField from '@material-ui/core/TextField';
 
 describe('InputField', () => {

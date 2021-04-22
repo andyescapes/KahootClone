@@ -5,6 +5,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import PropTypes from 'prop-types';
 
+// Modal Styled component
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: 'flex',
@@ -22,11 +23,6 @@ const useStyles = makeStyles((theme) => ({
 export default function ErrorPopUp (props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-
-  // const handleOpen = (e) => {
-  //   e.stopPropagation();
-  //   setOpen(true);
-  // };
 
   const handleClose = (e) => {
     e.stopPropagation();

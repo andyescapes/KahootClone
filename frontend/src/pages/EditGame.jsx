@@ -24,30 +24,27 @@ function EditGame (props) {
 
   const { randomBytes } = require('crypto');
 
+  // create a new id for answers
   const newId = () => {
     return randomBytes(16).toString('hex');
   };
 
+  // get the details of a quiz
   const getQuizDetails = async (token, id) => {
-    console.log(id);
-    const request = await fetch(`http://localhost:5544/admin/quiz/${id}`, {
+    const request = await fetch(`http://localhost:5546/admin/quiz/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
     const result = await request.json();
-    console.log(result);
     setQuestions(result.questions);
   };
 
+  // add a new question to a quiz
   const addQuizQuestion = async (token, id, questionObject) => {
-    // questionObject.answers.push({
-    //   id: newId(),
-    //   answer: questionObject.correctAnswer,
-    // });
     const body = { questions: questionObject };
-    console.log(body);
+
     if (!question || !timeLimit || !points) {
       setError('All fields must be full');
       return;
@@ -57,7 +54,7 @@ function EditGame (props) {
       return;
     }
     setError('');
-    const request = await fetch(`http://localhost:5544/admin/quiz/${id}`, {
+    const request = await fetch(`http://localhost:5546/admin/quiz/${id}`, {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -70,18 +67,15 @@ function EditGame (props) {
     setQuestions(questionObject);
   };
 
+  // delete a question from a quiz
   const deleteQuizQuestion = async (token, gameId, questionId) => {
-    console.log(questions);
     const questionDeleted = questions.filter((question) => {
-      console.log(question.id, 'then', questionId);
-
       return !(question.id === questionId);
     });
 
     const body = { questions: questionDeleted };
 
-    console.log(questionDeleted);
-    const request = await fetch(`http://localhost:5544/admin/quiz/${gameId}`, {
+    const request = await fetch(`http://localhost:5546/admin/quiz/${gameId}`, {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -89,15 +83,18 @@ function EditGame (props) {
       },
       body: JSON.stringify(body),
     });
-    const result = await request.json();
-    console.log(result);
     if (request.status === 200) setQuestions(questionDeleted);
   };
 
+  // get quiz details initiall with clean up
   React.useEffect(() => {
     getQuizDetails(props.token, gameid);
+    return () => {
+      setAnswers('')
+    }
   }, []);
 
+  // handle errors
   const renderError = () => {
     if (error) {
       return (

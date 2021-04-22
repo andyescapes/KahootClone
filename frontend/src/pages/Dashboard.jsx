@@ -9,26 +9,29 @@ function Dashboard (props) {
   const [quizName, setQuizName] = React.useState('');
   const [quizzes, setQuizzes] = React.useState([]);
 
-  console.log('rerender dashboard');
   React.useEffect(() => {
     getQuizzes(props.token, setQuizzes);
+
+    return () => {
+      setQuizzes('')
+    }
   }, []);
 
+  // add a new quiz
   const addNewQuiz = (token, quizName, setQuizzes) => {
     newQuiz(token, quizName);
     getQuizzes(token, setQuizzes);
   };
 
+  // delete an existing quiz
   const deleteQuiz = async (token, id, setQuizzes, quizzes) => {
-    const request = await fetch(`http://localhost:5544/admin/quiz/${id}`, {
+    const request = await fetch(`http://localhost:5546/admin/quiz/${id}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
-    const result = await request.json();
-    console.log(result, 'done bro');
     if (request.status === 200) {
       setQuizzes(
         quizzes.filter((quiz) => {
@@ -73,6 +76,7 @@ function Dashboard (props) {
               variant="contained"
               color="primary"
               onClick={() => addNewQuiz(props.token, quizName, setQuizzes)}
+              data-test-target="Dashboard"
             >
               Create New Game
             </Button>

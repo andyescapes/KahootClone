@@ -9,4 +9,4 @@ Using Enzyme I followed this main approach:
 
 However, there was a slight issue with my testing. This was due to the fact that all my components listed above used Material UI components which wrap standard html elements like inputs in a Material UI component. This combined with being prescribed by Hayden to use shallow rendering made it difficult to test some additional props which would be passed to child components (because shallow rendering doesn't render children). That being said I tried to cover as many cases as possible.
 
-With completing UI testing I still had to make some adjustments since my Material UI components were at times inconvenient. That being said I was able to succesfully test for the happy path of the program.
+With completing UI testing I still had to make some adjustments since my Material UI components were at times inconvenient. That being said I was able to succesfully test for the happy path of the program. I extended the response time as I assume due to cse server load responses were quite slow. My test in the frontend folder in the folder "cypress"

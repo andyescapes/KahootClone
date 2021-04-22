@@ -28,25 +28,21 @@ function ActiveGamePlay (props) {
   const serverPollRef = React.useRef(null);
   const history = useHistory();
 
-  console.log(answers);
-
+  // start initial polling to see when user advances game
   React.useEffect(() => {
-    console.log('USE EFFECT ACTIVE');
     serverPollRef.current = setInterval(() => {
-      console.log('im polling');
       getQuestion(playerid);
     }, 2000);
   }, []);
 
+  // start the timer we timeLeft state has been set
   React.useEffect(() => {
     if (timeLeft >= -1) {
       setTimeout(() => {
         if (timeLeft === -1) {
           setTimeLeft(-2);
-          console.log('what is this1');
           getAnswer(playerid);
           serverPollRef.current = setInterval(() => {
-            console.log('second interval active');
             getQuestion(playerid);
           }, 2000);
         }
@@ -57,7 +53,7 @@ function ActiveGamePlay (props) {
 
   async function getQuestion (playerid) {
     const request = await fetch(
-      `http://localhost:5544/play/${playerid}/question`,
+      `http://localhost:5546/play/${playerid}/question`,
       {
         method: 'GET',
         headers: {
@@ -66,29 +62,32 @@ function ActiveGamePlay (props) {
       }
     );
     const result = await request.json();
-    console.log(request);
-    console.log(result);
     if (result.error === 'Session ID is not an active session') {
       setGameFinished(true);
       clearInterval(serverPollRef.current);
     } else if (result.error === 'Session has not started yet') {
       setModalMessage("Game hasn't started");
       setError(`${result.error}. Please wait until the admin starts the game`);
+    // if the question is different set the states required
     } else if (request.status === 200 && question !== result.question.question) {
       clearInterval(serverPollRef.current);
       setQuestion(result.question.question);
       setImage(result.question.image);
       setUrl(result.question.url);
 
+      // remove any empty answers that were not provided
       const answerState = result.question.answers.filter((answer) => {
         return !(answer === 0);
       });
+      // set a new attribute selected based on if user selects the answer
       answerState.forEach((answer) => {
         answer.selected = false;
       });
       setAnswers(answerState);
+      // perform behaviour if it is a multiple answer or single answer question
       setQuestionType(result.question.questionType);
 
+      // calculate remaining time for user
       const gameStartedTime = new Date(
         result.question.isoTimeLastQuestionStarted
       );
@@ -97,16 +96,17 @@ function ActiveGamePlay (props) {
         result.question.timeLimit -
           (currentTime.getTime() - gameStartedTime.getTime()) / 1000
       );
+      // if the user has time left set it
       if (remainingTime > 0) {
-        console.log(remainingTime);
         setTimeLeft(remainingTime);
-        // setTimeout(getAnswer(playerid), 20000);
       }
     }
   }
+
+  // retrieving the answer after the time is up
   async function getAnswer (playerid) {
     const request = await fetch(
-      `http://localhost:5544/play/${playerid}/answer`,
+      `http://localhost:5546/play/${playerid}/answer`,
       {
         method: 'GET',
         headers: {
@@ -115,10 +115,8 @@ function ActiveGamePlay (props) {
       }
     );
     const result = await request.json();
-    console.log(result, 'whats good');
-    if (request.status !== 200) {
-      // setError(`${result.error}. Please wait until the admin starts the game`);
-    } else if (request.status === 200) {
+
+    if (request.status === 200) {
       let answerString = 'The answer(s) was ';
       result.answerIds.forEach((answerId, index) => {
         answers.forEach((answerObject) => {
@@ -149,7 +147,6 @@ function ActiveGamePlay (props) {
         } else {
           answer.selected = false;
         }
-
         return answer;
       });
       setAnswers(answersCopy);
@@ -166,15 +163,13 @@ function ActiveGamePlay (props) {
       });
       setAnswers(answersCopy);
       sendPlayerAnswer(playerid, selectedAnswerIds);
-      // see if it actually sends i have no idea
     }
   };
 
   const sendPlayerAnswer = async (playerId, answerIds) => {
     const body = { answerIds: answerIds };
-    console.log(body, 'my answers');
     const request = await fetch(
-      `http://localhost:5544/play/${playerId}/answer`,
+      `http://localhost:5546/play/${playerId}/answer`,
       {
         method: 'PUT',
         headers: {
@@ -183,22 +178,11 @@ function ActiveGamePlay (props) {
         body: JSON.stringify(body),
       }
     );
-    const result = await request.json();
-    console.log(result);
+    if (request.status !== 200) {
+      setError('Server Error')
+    }
   };
 
-  // if (timeLeft === -1) {
-  //   setTimeLeft(-2);
-  //   console.log("what is this1");
-  //   // clearInterval(timerInterval.current);
-  //   // console.log("what is this2");
-  //   getAnswer(playerid);
-  //   // serverPollRef.current = setInterval(() => {
-  //   //   console.log("second interval active");
-  //   //   getQuestion(playerid);
-  //   // }, 2000);
-  // }
-  // supposedly this polling works at the start and afte the timer is up, we need to get the answers though
   return (
     <>
       <Grid

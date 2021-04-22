@@ -8,9 +8,8 @@ function Login (props) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const history = useHistory();
-  console.log(email);
-  console.log(password);
 
+  // allowing a user to log in
   const logIn = (inputEmail, inputPassword) => {
     const body = {
       email: inputEmail,
@@ -18,7 +17,7 @@ function Login (props) {
     };
 
     async function logInRequest (body) {
-      const result = await fetch('http://localhost:5544/admin/auth/login', {
+      const result = await fetch('http://localhost:5546/admin/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,10 +25,9 @@ function Login (props) {
         body: JSON.stringify(body),
       });
       const tokenObject = await result.json();
-      console.log(result);
-      console.log(tokenObject);
       props.setToken(tokenObject.token);
-      if (result.status === '200') {
+      if (result.status === 200) {
+        // storing token
         props.setIsLoggedIn(true);
         history.push('/dashboard');
       }
@@ -96,5 +94,6 @@ Login.propTypes = {
   token: PropTypes.string,
   setToken: PropTypes.func,
   Dashboard: PropTypes.bool,
+  setIsLoggedIn: PropTypes.func
 }
 export default Login;

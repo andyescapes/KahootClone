@@ -11,18 +11,20 @@ import {
   Container,
 } from '@material-ui/core';
 
-function JoinGameScreen (props) {
+function PlayerResults (props) {
   const { playerid } = useParams();
   // const [sessionID, setSessionID] = React.useState("");
   const [results, setResults] = React.useState([]);
 
+  // getting results first
   React.useEffect(() => {
     getResults(playerid);
   }, []);
 
+  // getting players performance
   async function getResults (playerid) {
     const request = await fetch(
-      `http://localhost:5544/play/${playerid}/results`,
+      `http://localhost:5546/play/${playerid}/results`,
       {
         method: 'GET',
         headers: {
@@ -31,14 +33,13 @@ function JoinGameScreen (props) {
       }
     );
     const result = await request.json();
-    console.log(result, 'whats good');
-    if (request.status !== 200) {
-      // setError(`${result.error}. Please wait until the admin starts the game`);
-    } else if (request.status === 200) {
+
+    if (request.status === 200) {
       setResults(result);
     }
   }
 
+  // calculating the total sum of correct answers
   const getTotalCorrect = (results) => {
     return results.filter((result) => {
       return result.correct === true;
@@ -85,4 +86,4 @@ function JoinGameScreen (props) {
   );
 }
 
-export default JoinGameScreen;
+export default PlayerResults;

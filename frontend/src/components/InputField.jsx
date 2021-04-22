@@ -12,11 +12,6 @@ function InputField (props) {
         type={props.type ?? 'text'}
         name={props.field}
       />
-      {/* <input
-        type = {props.type ?? "text"}
-        onChange = {e=> props.setState(e.target.value)
-        }>
-      </input> */}
     </div>
   );
 }

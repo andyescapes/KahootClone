@@ -32,17 +32,15 @@ function EditGame (props) {
     return randomBytes(16).toString('hex');
   };
 
-  console.log(answers, 'lol');
+  // getting the details of every game/quiz
   const getQuizDetails = async (token, id) => {
-    console.log(id);
-    const request = await fetch(`http://localhost:5544/admin/quiz/${id}`, {
+    const request = await fetch(`http://localhost:5546/admin/quiz/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
     const result = await request.json();
-    console.log(result);
 
     const selectedQuestion = result.questions.filter((question) => {
       return question.id === questionid;
@@ -58,6 +56,7 @@ function EditGame (props) {
     setImage(question.image);
   };
 
+  // preparing question data structure to edit/save a question
   const saveQuizQuestion = async (
     token,
     id,
@@ -65,34 +64,29 @@ function EditGame (props) {
     questions,
     questionObject
   ) => {
-    // remove the
     const editedQuestionsArray = questions.filter((question) => {
       return !(question.id === questionid);
     });
     editedQuestionsArray.push(questionObject);
 
+    // error checking
     const body = { questions: editedQuestionsArray };
-    console.log(body, 'this is the body');
     if (!question || !timeLimit || !points) {
       setError('All fields must be full');
       return;
     }
     if (answers.filter((e) => e === 0).length > 4) {
-      console.log(answers, 'whats going on here');
       setError('You need atleast another answer!');
       return;
     }
     if (answers.filter((e) => e.correct === true).length === 0) {
-      console.log(answers, 'whats going on here');
       setError('You need atleast one correct answer!');
       return;
     }
 
-    // if (error.length > 0) {
-    //   return;
-    // }
     setError('');
-    const request = await fetch(`http://localhost:5544/admin/quiz/${id}`, {
+    // calling backend to updatte question
+    const request = await fetch(`http://localhost:5546/admin/quiz/${id}`, {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -100,17 +94,18 @@ function EditGame (props) {
       },
       body: JSON.stringify(body),
     });
-    console.log(request.status);
     setQuestions(questionObject);
     if (request.status === 200) {
       setError('success');
     }
   };
 
+  // initially retrieve all quiz details
   React.useEffect(() => {
     getQuizDetails(props.token, gameid);
   }, []);
 
+  // setting the user inputted correct answer (the check boxes)
   const setCorrectAnswerState = (index, answers) => {
     const answersCopy = [...answers];
     // delete if input is 0
@@ -119,13 +114,11 @@ function EditGame (props) {
         answersCopy[index].correct === false;
       setAnswers(answersCopy);
     }
-
-    console.log(answers);
   };
 
+  // setting state for normal string answers
   const setAnswerState = (value, index, answers) => {
     const answersCopy = [...answers];
-    // delete if input is 0
     if (value.length === 0) {
       answersCopy[index] = 0;
     } else {
@@ -137,17 +130,13 @@ function EditGame (props) {
         answersCopy[index].answer = value;
       }
     }
-
-    console.log(answers);
     setAnswers(answersCopy);
   };
 
+  // updating state for image uploads
   const updateImageState = (event) => {
     try {
       fileToDataUrl(event.target.files[0]).then((res) => {
-        // console.log(res);
-        // const split_64_encoded = res.split(",");
-        // console.log(split_64_encoded[1]);
         setImage(res);
       });
       setError('');
@@ -156,6 +145,7 @@ function EditGame (props) {
     }
   };
 
+  // error checking
   const renderError = () => {
     if (error) {
       if (error === 'success') {
@@ -320,7 +310,7 @@ function EditGame (props) {
 
                 <Grid item xs={6}>
                   <div>
-                    <Typography variant="body2">Upload Image</Typography>
+                    <Typography variant="body2">Upload Or Change Image</Typography>
                   </div>
                   <input type="file" onChange={updateImageState}></input>
                 </Grid>

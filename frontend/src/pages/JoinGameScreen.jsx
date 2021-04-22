@@ -20,12 +20,13 @@ function JoinGameScreen (props) {
     setSessionID(sessionid);
   }, []);
 
+  // allow a player to join a game
   async function joinGame (name, sessionid) {
     const body = {
       name: name,
     };
     const request = await fetch(
-      `http://localhost:5544/play/join/${sessionid}`,
+      `http://localhost:5546/play/join/${sessionid}`,
       {
         method: 'POST',
         headers: {
@@ -35,7 +36,6 @@ function JoinGameScreen (props) {
       }
     );
     const result = await request.json();
-    console.log(result);
     if (request.status !== 200) {
       setError(result.error);
     } else if (request.status === 200) {
@@ -55,7 +55,7 @@ function JoinGameScreen (props) {
         <Grid item xs={2}></Grid>
         <Grid item xs={10}>
           <Container maxWidth="sm">
-            <Typography variant="h4" gutterBottom gutterTop>
+            <Typography variant="h4" gutterBottom>
               Join the Session!
             </Typography>
             <InputField

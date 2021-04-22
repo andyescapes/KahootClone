@@ -7,16 +7,17 @@ function NavBar (props) {
   const history = useHistory();
 
   const logOut = async (token) => {
-    const request = await fetch('http://localhost:5544/admin/auth/logout', {
+    const request = await fetch('http://localhost:5546/admin/auth/logout', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
-    const result = await request.json();
-    console.log(result, 'hahahaS');
-    if (request.status === 200) history.push('/login');
+    if (request.status === 200) {
+      history.push('/login')
+      props.setIsLoggedIn(false)
+    }
   };
 
   const homeLink = (e) => {
@@ -29,7 +30,7 @@ function NavBar (props) {
         <Button color="inherit" onClick={homeLink}>
           Home
         </Button>
-        <Button color="inherit" edge="end" onClick={() => logOut(props.token)}>
+        <Button color="inherit" edge="end" onClick={() => logOut(props.token)} data-test-target="LogOut">
           Log Out
         </Button>
       </Toolbar>
@@ -38,6 +39,7 @@ function NavBar (props) {
 }
 
 NavBar.propTypes = {
-  token: PropTypes.string
+  token: PropTypes.string,
+  setIsLoggedIn: PropTypes.func
 }
 export default NavBar;

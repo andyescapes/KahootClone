@@ -54,6 +54,7 @@ export default function SessionModal (props) {
                   color="primary"
                   variant="contained"
                   onClick={props.onClickFn}
+                  data-test-target="Results"
                 >
                   {props.buttonMessage}
                 </Button>
@@ -69,7 +70,10 @@ export default function SessionModal (props) {
 SessionModal.propTypes = {
   message: PropTypes.string,
   setter: PropTypes.func,
-  data: PropTypes.string,
+  data: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
   field: PropTypes.string,
   buttonMessage: PropTypes.string,
   onClickFn: PropTypes.func,

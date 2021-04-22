@@ -12,7 +12,6 @@ import ActiveGamePlay from './pages/ActiveGamePlay';
 import PlayerResults from './pages/PlayerResults';
 
 import {
-  useHistory,
   BrowserRouter as Switch,
   Route,
   Redirect,
@@ -22,12 +21,6 @@ function App () {
   const [token, setToken] = React.useState('');
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
-  const checkLoggedIn = () => {
-    if (!isLoggedIn) {
-      return <Redirect to="/login" />;
-    }
-  };
-
   console.log(token);
   return (
     <>
@@ -36,34 +29,44 @@ function App () {
           <Login setToken={setToken} setIsLoggedIn={setIsLoggedIn}></Login>
         </Route>
         <Route path="/register">
-          <Register setToken={setToken}></Register>
+          <Register setToken={setToken} setIsLoggedIn={setIsLoggedIn}></Register>
         </Route>
         <Route path="/dashboard">
-          <NavBar token={token}></NavBar>
-          <Dashboard token={token}></Dashboard>
+
+          {/* {isLoggedIn ?  <><NavBar token={token}></NavBar>
+          <Dashboard token={token}></Dashboard></> : <Redirect to="/login" />} */}
+          {!isLoggedIn && <Redirect to="/login" />}
+          <><NavBar token={token} setIsLoggedIn={setIsLoggedIn}></NavBar>
+          <Dashboard token={token}></Dashboard></>
         </Route>
         <Route exact path="/edit/:gameid">
-          <NavBar token={token}></NavBar>
+          {!isLoggedIn && <Redirect to="/login" />}
+          <NavBar token={token} setIsLoggedIn={setIsLoggedIn}></NavBar>
           <EditGame token={token}></EditGame>
         </Route>
         <Route exact path="/edit/:gameid/:questionid">
-          <NavBar token={token}></NavBar>
+          {!isLoggedIn && <Redirect to="/login" />}
+          <NavBar token={token} setIsLoggedIn={setIsLoggedIn}></NavBar>
           <EditQuestion token={token}></EditQuestion>
         </Route>
         <Route exact path="/results/:gameid/:sessionid">
-          <NavBar token={token}></NavBar>
+          {!isLoggedIn && <Redirect to="/login" />}
+          <NavBar token={token} setIsLoggedIn={setIsLoggedIn}></NavBar>
           <Results token={token}></Results>
         </Route>
         <Route exact path="/play/:sessionid">
-          <NavBar token={token}></NavBar>
+          {!isLoggedIn && <Redirect to="/login" />}
+          <NavBar token={token} setIsLoggedIn={setIsLoggedIn}></NavBar>
           <JoinGameScreen token={token}></JoinGameScreen>
         </Route>
         <Route exact path="/play/:sessionid/:playerid">
-          <NavBar token={token}></NavBar>
+          {!isLoggedIn && <Redirect to="/login" />}
+          <NavBar token={token} setIsLoggedIn={setIsLoggedIn}></NavBar>
           <ActiveGamePlay token={token}></ActiveGamePlay>
         </Route>
         <Route exact path="/play/:sessionid/:playerid/results">
-          <NavBar token={token}></NavBar>
+          {!isLoggedIn && <Redirect to="/login" />}
+          <NavBar token={token} setIsLoggedIn={setIsLoggedIn}></NavBar>
           <PlayerResults token={token}></PlayerResults>
         </Route>
 

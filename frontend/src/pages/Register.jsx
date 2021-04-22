@@ -17,7 +17,7 @@ function Register (props) {
       name: inputName,
     };
     async function logInRequest (body) {
-      const result = await fetch('http://localhost:5544/admin/auth/register', {
+      const result = await fetch('http://localhost:5546/admin/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -27,6 +27,7 @@ function Register (props) {
       const tokenObject = await result.json();
       console.log(tokenObject);
       props.setToken(tokenObject.token);
+      props.setIsLoggedIn(true)
       if (result.status === 200) {
         history.push('/dashboard');
       }
@@ -84,5 +85,6 @@ function Register (props) {
 }
 Register.propTypes = {
   setToken: PropTypes.func,
+  setIsLoggedIn: PropTypes.func
 }
 export default Register;

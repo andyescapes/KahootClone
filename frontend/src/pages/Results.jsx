@@ -40,7 +40,7 @@ function Results (props) {
 
   const getOverallResultsAndQuizDetails = async (token, sessionId, id) => {
     const request = await fetch(
-      `http://localhost:5544/admin/session/${sessionId}/results`,
+      `http://localhost:5546/admin/session/${sessionId}/results`,
       {
         method: 'GET',
         headers: {
@@ -50,20 +50,15 @@ function Results (props) {
       }
     );
     const result = await request.json();
-    console.log(result);
 
     // getting quiz question information
-    const quizRequest = await fetch(`http://localhost:5544/admin/quiz/${id}`, {
+    const quizRequest = await fetch(`http://localhost:5546/admin/quiz/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
     const quizResult = await quizRequest.json();
-    console.log(quizResult);
-
-    // if (result.error)
-    //   setError("Session is still active, please wait until game is complete");
 
     if (request.status === 200) {
       const playerResults = result.results
@@ -82,6 +77,7 @@ function Results (props) {
         });
         playerScoreInfo.push(playerObject);
       });
+      // ordering top 5
       playerScoreInfo.sort(
         (a, b) => parseFloat(b.score) - parseFloat(a.score)
       )
@@ -90,14 +86,14 @@ function Results (props) {
         playerScoreInfo.length -= subtract
       }
       setScores(playerScoreInfo);
-      console.log(playerScoreInfo);
 
-      // calculate answer percentage
+      // calculate answer percentage for the table
       const averageResponseTimes = new Array(quizQuestions.length).fill(0);
       playerResults.forEach(user => {
         user.answers.forEach((answer, index) => {
           const questionStarted = new Date(answer.questionStartedAt)
           const questionAnswered = new Date(answer.answeredAt)
+          // here if players don't answer we assume they took the whole time
           if (!questionAnswered) {
             averageResponseTimes[index] += answer.timeLimit
           } else {
@@ -109,7 +105,6 @@ function Results (props) {
       setAvgResponse(averageResponseTimes.map(response => {
         return (response / result.results.length).toFixed(3)
       }))
-      console.log(averageResponseTimes, 'Resp');
 
       // get data for bar graph, breakdown of percentage of people who got questions right
       const percentageCorrectPerQuestion = new Array(quizQuestions.length).fill(0);
@@ -121,8 +116,7 @@ function Results (props) {
           }
         })
       })
-      console.log(percentageCorrectPerQuestion, 'percentage yooooooooo')
-
+      // setting data for the chart
       setChartData(
         {
           labels: quizQuestions.map((question, index) => {
@@ -200,11 +194,11 @@ function Results (props) {
                   </TableHead>
                   <TableBody>
                     {avgResponse.map((response, index) => (
-                      <TableRow key={response}>
+                      <TableRow key={index}>
                         <TableCell component="th" scope="row">
-                          {index}
+                          {index + 1}
                         </TableCell>
-                        <TableCell align="right">{response}</TableCell>
+                        <TableCell align="right">{ isNaN(response) ? 0 : response}</TableCell>
                       </TableRow>
                     ))}
                     <TableRow></TableRow>

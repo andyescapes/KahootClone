@@ -23,22 +23,23 @@ function GameCard (props) {
   const [gameStopped, setGameStopped] = React.useState(false);
   const [message, setMessage] = React.useState(false);
 
+  // get the details of a particular quiz
   const getQuizDetails = async (token, id) => {
-    const request = await fetch(`http://localhost:5544/admin/quiz/${id}`, {
+    const request = await fetch(`http://localhost:5546/admin/quiz/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
     const result = await request.json();
-    console.log(result);
     setSessionId(result.active);
     setActiveSession(true);
   };
 
+  // handle calls fo start, stop and advance
   const gameApiCall = async (token, id, command) => {
     const request = await fetch(
-      `http://localhost:5544/admin/quiz/${id}/${command}`,
+      `http://localhost:5546/admin/quiz/${id}/${command}`,
       {
         method: 'POST',
         headers: {
@@ -48,14 +49,10 @@ function GameCard (props) {
       }
     );
     const result = await request.json();
-    console.log(result);
     if (result.error) setError(result.error);
 
     if (request.status === 200) {
-      console.log('gey');
-
       if (command === 'start') {
-        // setActiveSessionPopUp(true);
         getQuizDetails(token, id);
       } else if (command === 'advance') {
         setMessage('The Quiz moved on to the next Question');
@@ -65,6 +62,7 @@ function GameCard (props) {
     }
   };
 
+  // error checking to see if a last game exists or not
   const endGameOnClick = () => {
     if (sessionId) {
       history.push(`/results/${props.id}/${sessionId}`);
@@ -77,6 +75,7 @@ function GameCard (props) {
     navigator.clipboard.writeText(`http://localhost:3000/play/${sessionId}`);
   };
 
+  // slight styled component
   const useStyles = makeStyles((theme) => ({
     root: {
       fontSize: '0.7em',
@@ -151,6 +150,7 @@ function GameCard (props) {
                   event.stopPropagation();
                   gameApiCall(props.token, props.id, 'start');
                 }}
+                data-test-target="Start"
               >
                 Start Game
               </Button>
@@ -163,6 +163,7 @@ function GameCard (props) {
                   event.stopPropagation();
                   gameApiCall(props.token, props.id, 'end');
                 }}
+                data-test-target="Stop"
               >
                 Stop Game
               </Button>{' '}
@@ -227,10 +228,16 @@ function GameCard (props) {
 }
 
 GameCard.propTypes = {
-  id: PropTypes.string,
+  id: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
   dashboard: PropTypes.bool,
   questionId: PropTypes.string,
-  thumbnail: PropTypes.string,
+  thumbnail: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.bool
+  ]),
   token: PropTypes.string,
   setQuizzes: PropTypes.func,
   details: PropTypes.string,
