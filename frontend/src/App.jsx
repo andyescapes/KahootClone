@@ -1,20 +1,20 @@
-import React from "react";
-import "./App.css";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
-import EditGame from "./pages/EditGame";
-import NavBar from "./components/NavBar";
-import EditQuestion from "./pages/EditQuestion";
-import JoinGameScreen from "./pages/JoinGameScreen";
-import Results from "./pages/Results";
-import ActiveGamePlay from "./pages/ActiveGamePlay";
-import PlayerResults from "./pages/PlayerResults";
+import React from 'react';
+import './App.css';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import EditGame from './pages/EditGame';
+import NavBar from './components/NavBar';
+import EditQuestion from './pages/EditQuestion';
+import JoinGameScreen from './pages/JoinGameScreen';
+import Results from './pages/Results';
+import ActiveGamePlay from './pages/ActiveGamePlay';
+import PlayerResults from './pages/PlayerResults';
 
-import { BrowserRouter as Switch, Route, Redirect } from "react-router-dom";
+import { BrowserRouter as Switch, Route, Redirect } from 'react-router-dom';
 
-function App() {
-  const [token, setToken] = React.useState("");
+function App () {
+  const [token, setToken] = React.useState('');
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
   console.log(token);

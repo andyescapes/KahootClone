@@ -35,7 +35,7 @@ function ActiveGamePlay (props) {
     }, 2000);
   }, []);
 
-  // start the timer we timeLeft state has been set
+  // start the timer when timeLeft state has been set
   React.useEffect(() => {
     if (timeLeft >= -1) {
       setTimeout(() => {
