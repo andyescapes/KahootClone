@@ -1,24 +1,20 @@
-import React from 'react';
-import './App.css';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
-import EditGame from './pages/EditGame';
-import NavBar from './components/NavBar';
-import EditQuestion from './pages/EditQuestion';
-import JoinGameScreen from './pages/JoinGameScreen';
-import Results from './pages/Results';
-import ActiveGamePlay from './pages/ActiveGamePlay';
-import PlayerResults from './pages/PlayerResults';
+import React from "react";
+import "./App.css";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import EditGame from "./pages/EditGame";
+import NavBar from "./components/NavBar";
+import EditQuestion from "./pages/EditQuestion";
+import JoinGameScreen from "./pages/JoinGameScreen";
+import Results from "./pages/Results";
+import ActiveGamePlay from "./pages/ActiveGamePlay";
+import PlayerResults from "./pages/PlayerResults";
 
-import {
-  BrowserRouter as Switch,
-  Route,
-  Redirect,
-} from 'react-router-dom';
+import { BrowserRouter as Switch, Route, Redirect } from "react-router-dom";
 
-function App () {
-  const [token, setToken] = React.useState('');
+function App() {
+  const [token, setToken] = React.useState("");
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
   console.log(token);
@@ -29,15 +25,19 @@ function App () {
           <Login setToken={setToken} setIsLoggedIn={setIsLoggedIn}></Login>
         </Route>
         <Route path="/register">
-          <Register setToken={setToken} setIsLoggedIn={setIsLoggedIn}></Register>
+          <Register
+            setToken={setToken}
+            setIsLoggedIn={setIsLoggedIn}
+          ></Register>
         </Route>
         <Route path="/dashboard">
-
           {/* {isLoggedIn ?  <><NavBar token={token}></NavBar>
           <Dashboard token={token}></Dashboard></> : <Redirect to="/login" />} */}
           {!isLoggedIn && <Redirect to="/login" />}
-          <><NavBar token={token} setIsLoggedIn={setIsLoggedIn}></NavBar>
-          <Dashboard token={token}></Dashboard></>
+          <>
+            <NavBar token={token} setIsLoggedIn={setIsLoggedIn}></NavBar>
+            <Dashboard token={token}></Dashboard>
+          </>
         </Route>
         <Route exact path="/edit/:gameid">
           {!isLoggedIn && <Redirect to="/login" />}
@@ -55,17 +55,14 @@ function App () {
           <Results token={token}></Results>
         </Route>
         <Route exact path="/play/:sessionid">
-          {!isLoggedIn && <Redirect to="/login" />}
           <NavBar token={token} setIsLoggedIn={setIsLoggedIn}></NavBar>
           <JoinGameScreen token={token}></JoinGameScreen>
         </Route>
         <Route exact path="/play/:sessionid/:playerid">
-          {!isLoggedIn && <Redirect to="/login" />}
           <NavBar token={token} setIsLoggedIn={setIsLoggedIn}></NavBar>
           <ActiveGamePlay token={token}></ActiveGamePlay>
         </Route>
         <Route exact path="/play/:sessionid/:playerid/results">
-          {!isLoggedIn && <Redirect to="/login" />}
           <NavBar token={token} setIsLoggedIn={setIsLoggedIn}></NavBar>
           <PlayerResults token={token}></PlayerResults>
         </Route>
